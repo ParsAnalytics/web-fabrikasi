@@ -189,6 +189,14 @@ def generate_demo(lead: dict) -> dict:
         "generated_at":  datetime.now().strftime("%d.%m.%Y %H:%M"),
     }
 
+    # Sektöre özel dinamik içerik
+    if lead["category"] in ["restoran", "kafe"]:
+        context["menu_items"] = [
+            {"title": "Şefin Burgeri", "price": "280 ₺", "desc": "Özel dinlendirilmiş 180gr köfte ve sos ile."},
+            {"title": "Taş Fırın Pizza", "price": "310 ₺", "desc": "İnce hamur, mozerella ve taze kurutulmuş domates ile."},
+            {"title": "Özel Salata", "price": "190 ₺", "desc": "Organik yeşillikler ve özel sos eşliğinde."}
+        ]
+
     html = template.render(**context)
 
     # Çıktı dizini oluştur

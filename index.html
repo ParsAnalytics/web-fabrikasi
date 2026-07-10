@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Fabrikası — Canlı Demolar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #111827;
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #f3f4f6;
+      --muted: #9ca3af;
+      --yellow: #f59e0b;
+      --radius: 16px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+    }
+    .container {
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 40px;
+      border-radius: var(--radius);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    }
+    .logo {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--yellow);
+      margin-bottom: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+    }
+    p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 24px;
+    }
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      text-align: left;
+    }
+    .list-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      padding: 16px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .list-item:hover {
+      border-color: var(--yellow);
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .list-item h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+    }
+    .list-item span {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo"><i class="ph-fill ph-factory"></i> Web Fabrikası</div>
+    <h1>Özel Demo Web Siteleri</h1>
+    <p>Müşterilerimiz için özel olarak hazırladığımız taslak sitelerin listesi.</p>
+    
+    <div class="list">
+      <a href="./demos/karadeniz-yol-yardim-kadikoy/" class="list-item">
+        <div>
+          <h3>Karadeniz Yol Yardım</h3>
+          <span>📍 Kadıköy</span>
+        </div>
+        <i class="ph ph-caret-right"></i>
+      </a>
+      <a href="./demos/bella-kuafor-sisli/" class="list-item">
+        <div>
+          <h3>Bella Kuaför</h3>
+          <span>📍 Şişli</span>
+        </div>
+        <i class="ph ph-caret-right"></i>
+      </a>
+      <a href="./demos/gokkusagi-anaokulu-uskudar/" class="list-item">
+        <div>
+          <h3>Gökkuşağı Anaokulu</h3>
+          <span>📍 Üsküdar</span>
+        </div>
+        <i class="ph ph-caret-right"></i>
+      </a>
+      <a href="./demos/lezzet-kosesi-kadikoy/" class="list-item">
+        <div>
+          <h3>Lezzet Köşesi Lokantası</h3>
+          <span>📍 Kadıköy</span>
+        </div>
+        <i class="ph ph-caret-right"></i>
+      </a>
+    </div>
+  </div>
+</body>
+</html>
