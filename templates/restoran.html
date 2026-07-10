@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ business_name }} | Lezzetli Menü & Keyifli Atmosfer</title>
+  <meta name="description" content="{{ business_name }} — {{ city }} bölgesinde en taze malzemelerle hazırlanan eşsiz lezzetler, zengin menü ve kaliteli hizmet. Rezervasyon için hemen ulaşın." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet" />
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <style>
+    /* ─── RESET & TOKEN ─────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange:   #e65100;
+      --orange-d: #b23c00;
+      --bg:       #121212;
+      --card-bg:  #1e1e1e;
+      --border:   #2d2d2d;
+      --text:     #f5f5f5;
+      --muted:    #a0a0a0;
+      --white:    #ffffff;
+      --radius:   16px;
+      --gold:     #ffd54f;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; }
+
+    /* ─── PURCHASE BANNER ───────────────────────────── */
+    .purchase-banner {
+      background: var(--orange);
+      color: var(--white);
+      text-align: center;
+      padding: 10px 16px;
+      font-size: .85rem;
+      font-weight: 700;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+    .purchase-banner a {
+      color: var(--white);
+      text-decoration: underline;
+      margin-left: 8px;
+    }
+
+    /* ─── NAVBAR ────────────────────────────────────── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 5%;
+      background: rgba(18, 18, 18, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 40px;
+      z-index: 999;
+    }
+    .nav-logo {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--orange);
+    }
+    .nav-logo span { color: var(--white); }
+    .nav-cta {
+      background: var(--orange);
+      color: var(--white);
+      font-weight: 700;
+      font-size: .9rem;
+      padding: 12px 24px;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform .2s, background .2s;
+    }
+    .nav-cta:hover { transform: scale(1.03); background: var(--orange-d); }
+
+    /* ─── HERO ──────────────────────────────────────── */
+    .hero {
+      min-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 5% 60px;
+      background: 
+        radial-gradient(circle at 50% 30%, rgba(230, 81, 0, 0.15), transparent 60%),
+        var(--bg);
+      position: relative;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(230, 81, 0, 0.1);
+      border: 1px solid rgba(230, 81, 0, 0.3);
+      color: var(--orange);
+      font-size: .85rem;
+      font-weight: 700;
+      padding: 8px 16px;
+      border-radius: 50px;
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 24px;
+    }
+    .hero h1 span {
+      color: var(--orange);
+    }
+    .hero-sub {
+      font-size: clamp(1.1rem, 2vw, 1.3rem);
+      color: var(--muted);
+      max-width: 650px;
+      margin-bottom: 40px;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn-primary {
+      background: var(--orange);
+      color: var(--white);
+      font-weight: 700;
+      font-size: 1.05rem;
+      padding: 16px 36px;
+      border-radius: 50px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 8px 24px rgba(230, 81, 0, 0.3);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(230, 81, 0, 0.5); }
+    
+    .btn-secondary {
+      background: transparent;
+      color: var(--white);
+      border: 1px solid var(--border);
+      font-weight: 600;
+      font-size: 1.05rem;
+      padding: 16px 36px;
+      border-radius: 50px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background .2s;
+    }
+    .btn-secondary:hover { background: rgba(255, 255, 255, 0.05); }
+
+    /* ─── MENU SECTION ──────────────────────────────── */
+    .section { padding: 90px 5%; max-width: 1100px; margin: 0 auto; }
+    .section-title { text-align: center; font-size: 2.5rem; font-weight: 900; margin-bottom: 12px; }
+    .section-title span { color: var(--orange); }
+    .section-sub { text-align: center; color: var(--muted); margin-bottom: 60px; }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+    .menu-item {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform .2s, border-color .2s;
+    }
+    .menu-item:hover { transform: translateY(-4px); border-color: var(--orange); }
+    .menu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    .menu-title { font-size: 1.25rem; font-weight: 700; }
+    .menu-price { font-size: 1.25rem; font-weight: 800; color: var(--orange); }
+    .menu-desc { font-size: .9rem; color: var(--muted); line-height: 1.5; }
+
+    /* ─── GALLERY ───────────────────────────────────── */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .gallery-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      height: 250px;
+      border-radius: var(--radius);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: border-color .2s, color .2s;
+    }
+    .gallery-card:hover { border-color: var(--orange); color: var(--white); }
+    .gallery-card i { font-size: 3rem; color: var(--orange); }
+
+    /* ─── MAP & INFO ────────────────────────────────── */
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: center;
+    }
+    @media (max-width: 768px) {
+      .info-grid { grid-template-columns: 1fr; gap: 30px; }
+    }
+    .map-wrapper {
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      height: 350px;
+    }
+    .info-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .info-list li {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .info-list i { font-size: 1.5rem; color: var(--orange); }
+    .info-list h4 { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+    .info-list p { color: var(--muted); font-size: 0.95rem; }
+
+    /* ─── REVIEWS ───────────────────────────────────── */
+    .reviews-section { background: rgba(255, 255, 255, 0.02); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .review-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 24px;
+      border-radius: var(--radius);
+    }
+    .stars { color: var(--gold); margin-bottom: 10px; }
+
+    /* ─── CTA CARD ──────────────────────────────────── */
+    .cta-card {
+      background: var(--card-bg);
+      border: 2px solid var(--orange);
+      border-radius: var(--radius);
+      padding: 50px 30px;
+      text-align: center;
+      max-width: 600px;
+      margin: 40px auto 0;
+      box-shadow: 0 10px 30px rgba(230, 81, 0, 0.15);
+    }
+    .cta-card h3 { font-size: 1.8rem; margin-bottom: 16px; }
+
+    /* ─── FOOTER ────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 50px 5% 100px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    .footer-logo { font-size: 1.5rem; font-weight: 900; color: var(--orange); margin-bottom: 16px; }
+
+    /* ─── STICKY BOTTOM CALL (Mobile) ───────────────── */
+    .sticky-call {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: var(--orange);
+      display: flex;
+      justify-content: space-around;
+      padding: 16px;
+      z-index: 1000;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+    }
+    .sticky-call a {
+      color: var(--white);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    @media (min-width: 768px) {
+      .sticky-call { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Purchase Banner -->
+  <div class="purchase-banner">
+    🍽️ Bu site <strong>{{ business_name }}</strong> için özel hazırlandı.
+    <a href="{{ demo_cta_url }}">Sahiplenmek için tıklayın →</a>
+  </div>
+
+  <!-- Navbar -->
+  <nav>
+    <div class="nav-logo">{{ business_name }}</div>
+    <a href="tel:{{ phone }}" class="nav-cta">
+      <i class="ph ph-phone"></i> Rezervasyon Yap
+    </a>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-badge"><i class="ph ph-sparkles"></i> {{ city }} Lezzet Durağı</div>
+    <h1>{{ business_name }} Yemek <span>Sanattır.</span></h1>
+    <p class="hero-sub">Taze malzemelerle hazırlanan imza tabaklarımız ve huzurlu ortamımızla sizleri ağırlamaktan mutluluk duyuyoruz.</p>
+    <div class="hero-actions">
+      <a href="tel:{{ phone }}" class="btn-primary"><i class="ph ph-phone-call"></i> Rezervasyon: {{ phone }}</a>
+      <a href="{{ whatsapp_link }}" class="btn-secondary" target="_blank"><i class="ph ph-whatsapp-logo"></i> WhatsApp Menü</a>
+    </div>
+  </section>
+
+  <!-- Menu -->
+  <section class="section" id="menu">
+    <h2 class="section-title">İmza <span>Lezzetlerimiz</span></h2>
+    <p class="section-sub">Şeflerimizin özel tarifleriyle hazırlanan en popüler tabaklar</p>
+    
+    <div class="menu-grid">
+      <div class="menu-item">
+        <div class="menu-header">
+          <span class="menu-title">Şefin Özel Burgeri</span>
+          <span class="menu-price">280 ₺</span>
+        </div>
+        <p class="menu-desc">Özel dinlendirilmiş 180gr burger köftesi, karamelize soğan, cheddar peyniri ve özel sos ile.</p>
+      </div>
+      <div class="menu-item">
+        <div class="menu-header">
+          <span class="menu-title">Taş Fırın Pizza</span>
+          <span class="menu-price">310 ₺</span>
+        </div>
+        <p class="menu-desc">İtalyan usulü ince hamur üzerine taze mozerella, fesleğen ve kurutulmuş domates.</p>
+      </div>
+      <div class="menu-item">
+        <div class="menu-header">
+          <span class="menu-title">Fettuccine Alfredo</span>
+          <span class="menu-price">260 ₺</span>
+        </div>
+        <p class="menu-desc">Tavuk dilimleri, mantar, krema ve taze parmesan peyniri eşliğinde.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Placeholders -->
+  <section class="section">
+    <h2 class="section-title">Bizden <span>Kareler</span></h2>
+    <p class="section-sub">Atmosferimizi ve hazırlık süreçlerimizi keşfedin</p>
+    <div class="gallery-grid">
+      <div class="gallery-card"><i class="ph ph-cooking-pot"></i><span>Mutfak Hazırlığı</span></div>
+      <div class="gallery-card"><i class="ph ph-coffee"></i><span>Sıcak Kahveler</span></div>
+      <div class="gallery-card"><i class="ph ph-users-three"></i><span>Atmosfer & Masa</span></div>
+    </div>
+  </section>
+
+  <!-- Info & Map -->
+  <section class="section info-section">
+    <div class="info-grid">
+      <div>
+        <ul class="info-list">
+          <li>
+            <i class="ph ph-map-pin"></i>
+            <div>
+              <h4>Konumumuz</h4>
+              <p>{{ address }}</p>
+            </div>
+          </li>
+          <li>
+            <i class="ph ph-clock"></i>
+            <div>
+              <h4>Çalışma Saatleri</h4>
+              <p>Hafta içi & Hafta sonu: 09:00 - 23:00</p>
+            </div>
+          </li>
+          <li>
+            <i class="ph ph-phone"></i>
+            <div>
+              <h4>İletişim & Rezervasyon</h4>
+              <p>{{ phone }}</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="map-wrapper">
+        <iframe
+          src="https://maps.google.com/maps?q={{ address | urlencode }}&z=14&output=embed"
+          width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy">
+        </iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reviews -->
+  <section class="section reviews-section">
+    <h2 class="section-title">Misafirlerimizin <span>Yorumları</span></h2>
+    <p class="section-sub">Google Maps üzerindeki değerli görüşler</p>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p style="font-size:0.9rem; color:var(--muted)">"Yemeklerin kalitesi ve servis hızı tek kelimeyle harika. Kadıköy'de favori mekanımız oldu."</p>
+        <span style="font-size:0.8rem; font-weight:700; margin-top:12px; display:block;">Burak T.</span>
+      </div>
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p style="font-size:0.9rem; color:var(--muted)">"Atmosfer çok huzurlu, çalışanlar çok güler yüzlü. Şefin burgerini mutlaka denemelisiniz."</p>
+        <span style="font-size:0.8rem; font-weight:700; margin-top:12px; display:block;">Zeynep A.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Claim -->
+  <section class="section">
+    <div class="cta-card">
+      <h3>Bu Web Sitesi İşletmeniz İçin Satın Alınabilir!</h3>
+      <p style="color:var(--muted); margin-bottom:24px;">Hemen kendi alan adınız (.com / .com.tr) ve WhatsApp entegrasyonunuz ile yayına alın.</p>
+      <a href="{{ demo_cta_url }}" class="btn-primary"><i class="ph ph-shopping-cart"></i> Siteyi Sahiplen: 999 ₺</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-logo">{{ business_name }}</div>
+    <p>{{ address }} | Tel: {{ phone }}</p>
+    <p style="margin-top:20px; font-size:0.8rem;">© 2026 {{ business_name }}. Tüm Hakları Saklıdır.</p>
+  </footer>
+
+  <!-- Sticky Bottom (Mobile) -->
+  <div class="sticky-call">
+    <a href="tel:{{ phone }}"><i class="ph ph-phone-call"></i> Hemen Ara</a>
+    <a href="{{ whatsapp_link }}" target="_blank"><i class="ph ph-whatsapp-logo"></i> WhatsApp Menü</a>
+  </div>
+
+</body>
+</html>

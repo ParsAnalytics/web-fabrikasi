@@ -39,7 +39,7 @@ TEMPLATE_MAP = {
     "kres":         "anaokulu.html",
     "kuafor":       "kuafor.html",
     "guzellik":     "kuafor.html",
-    "restoran":     "restoran.html",          # yakında
+    "restoran":     "restoran.html",
     "tesisat":      "cekici-yol-yardim.html", # geçici
     "elektrik":     "cekici-yol-yardim.html", # geçici
 }
@@ -97,6 +97,16 @@ SAMPLE_LEADS = [
         "review_count": 142,
         "category": "kuafor",
         "slug": "bella-kuafor-sisli",
+    },
+    {
+        "name": "Lezzet Köşesi Lokantası",
+        "phone": "0212 444 55 66",
+        "address": "Kadıköy, İstanbul",
+        "city": "Kadıköy",
+        "rating": 4.7,
+        "review_count": 210,
+        "category": "restoran",
+        "slug": "lezzet-kosesi-kadikoy",
     },
     {
         "name": "Güvenli Çekici Hizmetleri",
