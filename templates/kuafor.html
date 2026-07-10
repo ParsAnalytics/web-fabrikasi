@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ business_name }} | {{ city }} Kuaför & Güzellik Salonu</title>
+  <meta name="description" content="{{ business_name }} — {{ city }} bölgesinin en prestijli kuaför ve güzellik salonu. Saç kesim, boya, keratin, manikür ve daha fazlası için randevu alın." />
+  <meta name="keywords" content="kuaför {{ city }}, güzellik salonu {{ city }}, saç kesim, saç boyama, keratin, manikür" />
+  <meta property="og:title" content="{{ business_name }} | {{ city }} Kuaförü" />
+  <meta property="og:description" content="{{ city }}'nin en prestijli kuaförü. Uzman ekip, premium ürünler." />
+  <meta property="og:type" content="website" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet" />
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <style>
+    /* ─── DESIGN TOKENS ─────────────────────────────────────────── */
+    :root {
+      --rose:       #b5838d;
+      --rose-light: #c99aa4;
+      --rose-dark:  #8a5f67;
+      --gold:       #c9a84c;
+      --gold-light: #e0c172;
+      --gold-dark:  #9e7c30;
+      --bg:         #0d0d0d;
+      --bg-2:       #111111;
+      --bg-3:       #161616;
+      --bg-card:    #141414;
+      --border:     rgba(201,168,76,0.18);
+      --border-hover: rgba(201,168,76,0.5);
+      --text:       #f0ece6;
+      --text-muted: #8a8078;
+      --text-dim:   #5a5550;
+    }
+
+    /* ─── RESET & BASE ──────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; display: block; }
+
+    /* ─── ANIMATIONS ────────────────────────────────────────────── */
+    @keyframes shimmer {
+      0%   { background-position: -200% center; }
+      100% { background-position:  200% center; }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes floatPulse {
+      0%, 100% { transform: scale(1) translateY(0); box-shadow: 0 8px 32px rgba(201,168,76,0.35); }
+      50%       { transform: scale(1.04) translateY(-4px); box-shadow: 0 16px 48px rgba(201,168,76,0.55); }
+    }
+    @keyframes glowPulse {
+      0%, 100% { opacity: 0.3; }
+      50%       { opacity: 0.6; }
+    }
+    @keyframes borderShimmer {
+      0%   { border-color: rgba(201,168,76,0.2); }
+      50%  { border-color: rgba(201,168,76,0.7); }
+      100% { border-color: rgba(201,168,76,0.2); }
+    }
+    @keyframes starGlow {
+      0%, 100% { text-shadow: 0 0 4px rgba(201,168,76,0.4); }
+      50%       { text-shadow: 0 0 12px rgba(201,168,76,0.9); }
+    }
+
+    /* ─── UTILITY ───────────────────────────────────────────────── */
+    .gold-text {
+      background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 50%, var(--gold-dark) 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 3s linear infinite;
+    }
+    .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(201,168,76,0.1);
+      border: 1px solid rgba(201,168,76,0.3);
+      color: var(--gold-light);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 18px;
+    }
+    .section-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+    .section-sub {
+      color: var(--text-muted);
+      font-size: 16px;
+      max-width: 520px;
+    }
+
+    /* ─── PURCHASE BANNER ───────────────────────────────────────── */
+    #purchase-banner {
+      position: sticky;
+      top: 0;
+      z-index: 9999;
+      background: linear-gradient(90deg, #0d0a02 0%, #1a1404 40%, #1a1404 60%, #0d0a02 100%);
+      border-bottom: 1px solid rgba(201,168,76,0.4);
+      padding: 11px 20px;
+      text-align: center;
+    }
+    #purchase-banner a {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--gold-light);
+      font-size: 13.5px;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      transition: color 0.2s;
+    }
+    #purchase-banner a:hover { color: #fff; }
+    #purchase-banner .banner-arrow {
+      background: linear-gradient(90deg, var(--gold-light), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: 16px;
+      font-weight: 700;
+      transition: transform 0.2s;
+    }
+    #purchase-banner a:hover .banner-arrow { transform: translateX(4px); }
+    .banner-highlight {
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--gold-light), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ─── NAVBAR ────────────────────────────────────────────────── */
+    #navbar {
+      position: sticky;
+      top: 40px;
+      z-index: 999;
+      background: rgba(13,13,13,0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+      transition: background 0.3s;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .nav-logo-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--rose-dark), var(--rose));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      border: 1px solid rgba(201,168,76,0.3);
+    }
+    .nav-logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .nav-logo-text span { color: var(--gold); }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: color 0.2s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1.5px;
+      background: var(--gold);
+      transition: width 0.25s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover::after { width: 100%; }
+    .btn-nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border-radius: 50px;
+      background: linear-gradient(135deg, var(--rose), var(--rose-dark));
+      border: 1px solid rgba(201,168,76,0.35);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s;
+      white-space: nowrap;
+    }
+    .btn-nav-cta:hover {
+      background: linear-gradient(135deg, var(--rose-light), var(--rose));
+      box-shadow: 0 4px 20px rgba(181,131,141,0.4);
+      transform: translateY(-1px);
+    }
+
+    /* ─── HERO ──────────────────────────────────────────────────── */
+    #hero {
+      position: relative;
+      min-height: 92vh;
+      display: flex;
+      align-items: center;
+      padding: 80px 0 60px;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 65% 40%, rgba(181,131,141,0.12) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 50% at 30% 70%, rgba(201,168,76,0.08) 0%, transparent 60%),
+        var(--bg);
+    }
+    .hero-pattern {
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(
+          -45deg,
+          transparent,
+          transparent 60px,
+          rgba(201,168,76,0.025) 60px,
+          rgba(201,168,76,0.025) 61px
+        );
+      pointer-events: none;
+    }
+    .hero-glow {
+      position: absolute;
+      top: -120px;
+      right: -100px;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,76,0.07) 0%, transparent 70%);
+      animation: glowPulse 4s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 700px;
+      animation: fadeInUp 0.8s ease both;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(201,168,76,0.1);
+      border: 1px solid rgba(201,168,76,0.35);
+      color: var(--gold-light);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      padding: 7px 18px;
+      border-radius: 100px;
+      margin-bottom: 28px;
+    }
+    .hero-badge-star { animation: starGlow 2s ease-in-out infinite; }
+    .hero-h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(38px, 6vw, 72px);
+      font-weight: 800;
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 24px;
+      letter-spacing: -1px;
+    }
+    .hero-h1 em {
+      font-style: italic;
+      color: var(--rose-light);
+    }
+    .hero-sub {
+      font-size: 17px;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      line-height: 1.7;
+      max-width: 560px;
+    }
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 52px;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px 30px;
+      border-radius: 50px;
+      background: linear-gradient(135deg, var(--rose) 0%, var(--rose-dark) 100%);
+      border: 1px solid rgba(201,168,76,0.4);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 4px 24px rgba(181,131,141,0.3);
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 36px rgba(181,131,141,0.5);
+      background: linear-gradient(135deg, var(--rose-light) 0%, var(--rose) 100%);
+    }
+    .btn-whatsapp {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px 28px;
+      border-radius: 50px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn-whatsapp:hover {
+      background: rgba(37,211,102,0.12);
+      border-color: rgba(37,211,102,0.4);
+      transform: translateY(-3px);
+    }
+    .btn-whatsapp i { color: #25d366; }
+    .hero-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px 40px;
+      padding-top: 28px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+    .stat-item { display: flex; flex-direction: column; gap: 4px; }
+    .stat-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--gold-light);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-dim);
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+    .stat-divider {
+      width: 1px;
+      height: 40px;
+      background: rgba(255,255,255,0.08);
+      align-self: center;
+    }
+
+    /* ─── SERVICES ──────────────────────────────────────────────── */
+    #services {
+      padding: 100px 0;
+      background: var(--bg-2);
+      position: relative;
+    }
+    #services::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0.3;
+    }
+    .services-header { text-align: center; margin-bottom: 56px; }
+    .services-header .section-sub { margin: 0 auto; }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .service-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px 32px;
+      transition: all 0.35s;
+      position: relative;
+      overflow: hidden;
+      cursor: default;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--rose), var(--gold));
+      opacity: 0;
+      transition: opacity 0.35s;
+    }
+    .service-card:hover {
+      border-color: rgba(201,168,76,0.4);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(181,131,141,0.08);
+    }
+    .service-card:hover::before { opacity: 1; }
+    .service-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(181,131,141,0.15), rgba(201,168,76,0.08));
+      border: 1px solid rgba(181,131,141,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      margin-bottom: 22px;
+      color: var(--rose-light);
+      transition: all 0.3s;
+    }
+    .service-card:hover .service-icon {
+      background: linear-gradient(135deg, rgba(181,131,141,0.25), rgba(201,168,76,0.15));
+      color: var(--gold-light);
+      transform: scale(1.08);
+    }
+    .service-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+    .service-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.65;
+      margin-bottom: 20px;
+    }
+    .service-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--gold);
+      background: rgba(201,168,76,0.08);
+      border: 1px solid rgba(201,168,76,0.2);
+      padding: 4px 12px;
+      border-radius: 100px;
+    }
+
+    /* ─── GALLERY ───────────────────────────────────────────────── */
+    #gallery {
+      padding: 100px 0;
+      background: var(--bg);
+    }
+    .gallery-header { text-align: center; margin-bottom: 56px; }
+    .gallery-header .section-sub { margin: 0 auto; }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    @media (min-width: 768px) {
+      .gallery-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    .gallery-card {
+      aspect-ratio: 3/4;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: var(--bg-3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      cursor: pointer;
+      transition: all 0.35s;
+      position: relative;
+      overflow: hidden;
+      animation: borderShimmer 4s ease-in-out infinite;
+    }
+    .gallery-card:nth-child(2) { animation-delay: 1s; }
+    .gallery-card:nth-child(3) { animation-delay: 2s; }
+    .gallery-card:nth-child(4) { animation-delay: 3s; }
+    .gallery-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.7) 100%);
+    }
+    .gallery-card:hover {
+      transform: scale(1.03);
+      border-color: rgba(201,168,76,0.6);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.6), 0 0 30px rgba(201,168,76,0.12);
+    }
+    .gallery-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      z-index: 1;
+      position: relative;
+    }
+    .gallery-icon-wrap {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(181,131,141,0.2), rgba(201,168,76,0.1));
+      border: 1px solid rgba(201,168,76,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      color: var(--gold-light);
+    }
+    .gallery-label {
+      font-family: 'Playfair Display', serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      text-align: center;
+    }
+    .gallery-sublabel {
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    /* ─── WHY US ────────────────────────────────────────────────── */
+    #whyus {
+      padding: 100px 0;
+      background: var(--bg-2);
+      position: relative;
+    }
+    .whyus-inner {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+    @media (min-width: 900px) {
+      .whyus-inner { grid-template-columns: 1fr 1fr; }
+    }
+    .whyus-left .section-sub { max-width: 460px; }
+    .whyus-features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px 24px;
+      transition: all 0.3s;
+    }
+    .feature-card:hover {
+      border-color: rgba(201,168,76,0.35);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    }
+    .feature-icon {
+      font-size: 30px;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+    .feature-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .feature-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ─── MAP ───────────────────────────────────────────────────── */
+    #map {
+      padding: 80px 0;
+      background: var(--bg);
+    }
+    .map-header { text-align: center; margin-bottom: 40px; }
+    .map-wrap {
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 8px 48px rgba(0,0,0,0.5);
+    }
+    .map-wrap iframe {
+      width: 100%;
+      height: 380px;
+      display: block;
+      border: none;
+      filter: grayscale(60%) invert(90%) hue-rotate(190deg);
+    }
+    .map-info {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 28px;
+    }
+    .map-info-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    .map-info-item i { color: var(--gold); font-size: 18px; }
+
+    /* ─── REVIEWS ───────────────────────────────────────────────── */
+    #reviews {
+      padding: 100px 0;
+      background: var(--bg-2);
+    }
+    .reviews-header { text-align: center; margin-bottom: 56px; }
+    .rating-hero {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+    }
+    .rating-big {
+      font-family: 'Playfair Display', serif;
+      font-size: 72px;
+      font-weight: 800;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .rating-stars-big { display: flex; gap: 6px; font-size: 28px; color: var(--gold); margin-bottom: 6px; }
+    .rating-count { font-size: 14px; color: var(--text-muted); }
+    .rating-divider { width: 1px; height: 64px; background: var(--border); }
+    .rating-breakdown { display: flex; flex-direction: column; gap: 6px; }
+    .breakdown-row { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-muted); }
+    .breakdown-bar { flex: 1; height: 4px; background: rgba(255,255,255,0.06); border-radius: 2px; min-width: 80px; }
+    .breakdown-fill { height: 100%; background: linear-gradient(90deg, var(--gold-dark), var(--gold)); border-radius: 2px; }
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .review-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px 28px 24px;
+      transition: all 0.3s;
+    }
+    .review-card:hover {
+      border-color: rgba(201,168,76,0.35);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    }
+    .review-stars { display: flex; gap: 4px; color: var(--gold); font-size: 16px; margin-bottom: 14px; }
+    .review-text {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+    .review-text::before { content: '"'; color: var(--gold); font-size: 20px; font-style: normal; }
+    .review-text::after  { content: '"'; color: var(--gold); font-size: 20px; font-style: normal; }
+    .review-author { display: flex; align-items: center; gap: 12px; }
+    .review-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--rose-dark), var(--rose));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+      border: 1px solid rgba(201,168,76,0.25);
+    }
+    .review-name { font-size: 14px; font-weight: 600; color: var(--text); }
+    .review-date { font-size: 12px; color: var(--text-dim); }
+
+    /* ─── PRICING / PURCHASE CTA ────────────────────────────────── */
+    #cta {
+      padding: 100px 0;
+      background: var(--bg);
+    }
+    .cta-card {
+      max-width: 760px;
+      margin: 0 auto;
+      border: 1px solid rgba(201,168,76,0.4);
+      border-radius: 28px;
+      padding: 60px 48px;
+      text-align: center;
+      background: linear-gradient(135deg, rgba(181,131,141,0.05), rgba(201,168,76,0.03));
+      position: relative;
+      overflow: hidden;
+      animation: borderShimmer 4s ease-in-out infinite;
+    }
+    .cta-card::before {
+      content: '';
+      position: absolute;
+      top: -80px; left: -80px;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,76,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-card::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; right: -80px;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(181,131,141,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(201,168,76,0.1);
+      border: 1px solid rgba(201,168,76,0.35);
+      color: var(--gold-light);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 7px 18px;
+      border-radius: 100px;
+      margin-bottom: 24px;
+    }
+    .cta-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(26px, 4vw, 40px);
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+    .cta-sub {
+      font-size: 16px;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      line-height: 1.7;
+    }
+    .cta-price {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 36px;
+    }
+    .cta-price-amount {
+      font-family: 'Playfair Display', serif;
+      font-size: 52px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .cta-price-label {
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+    .btn-cta-main {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 44px;
+      border-radius: 50px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+      color: #0d0a02;
+      border: none;
+      box-shadow: 0 6px 32px rgba(201,168,76,0.4);
+      letter-spacing: 0.3px;
+    }
+    .btn-cta-main:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 48px rgba(201,168,76,0.6);
+      background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 100%);
+    }
+    .cta-features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 36px;
+    }
+    .cta-feat {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .cta-feat i { color: var(--gold); font-size: 16px; }
+
+    /* ─── FOOTER ────────────────────────────────────────────────── */
+    #footer {
+      background: #080808;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding: 60px 0 40px;
+    }
+    .footer-inner {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    @media (min-width: 768px) {
+      .footer-inner { grid-template-columns: 2fr 1fr 1fr; }
+    }
+    .footer-brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    .footer-brand-desc {
+      font-size: 14px;
+      color: var(--text-dim);
+      line-height: 1.7;
+      max-width: 280px;
+      margin-bottom: 24px;
+    }
+    .footer-socials { display: flex; gap: 12px; }
+    .footer-social {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: var(--text-muted);
+      transition: all 0.25s;
+    }
+    .footer-social:hover {
+      background: rgba(201,168,76,0.1);
+      border-color: rgba(201,168,76,0.3);
+      color: var(--gold);
+    }
+    .footer-col-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a {
+      font-size: 14px;
+      color: var(--text-dim);
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--text); }
+    .footer-contact { display: flex; flex-direction: column; gap: 10px; }
+    .footer-contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--text-dim);
+    }
+    .footer-contact-item i { color: var(--gold); font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.05);
+      margin-top: 48px;
+      padding-top: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .footer-copy { font-size: 13px; color: var(--text-dim); }
+    .footer-copy a { color: var(--gold); }
+    .footer-powered { font-size: 12px; color: var(--text-dim); }
+
+    /* ─── MOBILE STICKY BAR ─────────────────────────────────────── */
+    #mobile-sticky {
+      display: none;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 888;
+      padding: 12px 16px;
+      background: rgba(10,10,10,0.97);
+      border-top: 1px solid var(--border);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    @media (max-width: 768px) {
+      #mobile-sticky { display: block; }
+    }
+    .mobile-sticky-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .btn-mobile-call {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--rose), var(--rose-dark));
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      border: 1px solid rgba(201,168,76,0.3);
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+    .btn-mobile-call:hover { opacity: 0.9; }
+    .btn-mobile-wa {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px;
+      border-radius: 14px;
+      background: #25d366;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+    .btn-mobile-wa:hover { background: #20b858; }
+
+    /* ─── WHATSAPP FLOAT ────────────────────────────────────────── */
+    #whatsapp-float {
+      position: fixed;
+      bottom: 90px;
+      right: 24px;
+      z-index: 777;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: #25d366;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: #fff;
+      box-shadow: 0 6px 24px rgba(37,211,102,0.45);
+      cursor: pointer;
+      animation: floatPulse 3s ease-in-out infinite;
+      transition: transform 0.2s;
+    }
+    @media (min-width: 769px) {
+      #whatsapp-float { bottom: 28px; }
+    }
+    #whatsapp-float:hover { transform: scale(1.12); }
+
+    /* ─── SCROLL ANIMATIONS ─────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ─── RESPONSIVE ────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hero-h1 { font-size: clamp(32px, 8vw, 48px); }
+      .hero-stats { gap: 16px 24px; }
+      .stat-divider { display: none; }
+      .services-grid { grid-template-columns: 1fr; }
+      .whyus-features { grid-template-columns: 1fr; }
+      .cta-card { padding: 40px 24px; }
+      body { padding-bottom: 76px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- 1. PURCHASE BANNER                                         -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div id="purchase-banner">
+    <a href="{{ demo_cta_url }}">
+      <span>✨ Bu site</span>
+      <span class="banner-highlight">{{ business_name }}</span>
+      <span>için özel hazırlandı. Sahiplenmek için tıklayın</span>
+      <span class="banner-arrow">→</span>
+    </a>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- 2. NAVBAR                                                  -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <nav id="navbar">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="#" class="nav-logo" id="nav-logo-link">
+          <div class="nav-logo-icon">✂</div>
+          <span class="nav-logo-text">{{ business_name }}</span>
+        </a>
+        <ul class="nav-links" role="list">
+          <li><a href="#services">Hizmetler</a></li>
+          <li><a href="#gallery">Galeri</a></li>
+          <li><a href="#reviews">Yorumlar</a></li>
+          <li><a href="#map">Konum</a></li>
+        </ul>
+        <a href="tel:{{ phone }}" class="btn-nav-cta" id="nav-cta-btn">
+          <i class="ph ph-phone-call"></i>
+          Randevu Al
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- 3. HERO                                                    -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-pattern"></div>
+    <div class="hero-glow"></div>
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="hero-badge-star">⭐</span>
+          {{ city }} No.1 Kuaförü
+        </div>
+        <h1 class="hero-h1">
+          Güzelliğinizi<br>
+          <em>Yeniden Keşfedin</em><br>
+          <span class="gold-text">{{ business_name }}</span>'de
+        </h1>
+        <p class="hero-sub">
+          Yılların deneyimi, premium ürünler ve sizi ev gibi hissettiren sıcak atmosferle
+          {{ city }}'nin en prestijli güzellik deneyimini yaşayın. Her detay, sizin için özenle tasarlandı.
+        </p>
+        <div class="hero-buttons">
+          <a href="tel:{{ phone }}" class="btn-primary" id="hero-call-btn">
+            <i class="ph ph-phone-call"></i>
+            Randevu Al — {{ phone }}
+          </a>
+          <a href="{{ whatsapp_link }}" target="_blank" rel="noopener" class="btn-whatsapp" id="hero-wa-btn">
+            <i class="ph ph-whatsapp-logo"></i>
+            WhatsApp'tan Yaz
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-value">15+</span>
+            <span class="stat-label">Yıl Deneyim</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-value">500+</span>
+            <span class="stat-label">Mutlu Müşteri</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-value">{{ rating }}⭐</span>
+            <span class="stat-label">Google Puan</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-value">5+</span>
+            <span class="stat-label">Uzman Stilist</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- 4. SERVICES                                                -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <section id="services">
+    <div class="container">
+      <div class="services-header reveal">
+        <div class="section-tag">
+          <i class="ph ph-sparkle"></i>
+          Hizmetlerimiz
+        </div>
+        <h2 class="section-heading">Her İhtiyacınız İçin<br><span class="gold-text">Profesyonel Çözümler</span></h2>
+        <p class="section-sub">Saç bakımından cilt güzelliğine, el-ayak bakımından gelin hazırlığına kadar her detayda uzmanlığımızla yanınızdayız.</p>
+      </div>
+      <div class="services-grid">
+        <!-- Saç Kesim -->
+        <div class="service-card reveal reveal-delay-1">
+          <div class="service-icon"><i class="ph ph-scissors"></i></div>
+          <h3 class="service-name">Saç Kesim</h3>
+          <p class="service-desc">Yüz şeklinize ve yaşam tarzınıza özel tasarlanan modern kesimlerle en iyi versiyonunuzu ortaya çıkarıyoruz.</p>
+          <span class="service-tag"><i class="ph ph-star"></i> En Popüler</span>
+        </div>
+        <!-- Boya & Röfle -->
+        <div class="service-card reveal reveal-delay-2">
+          <div class="service-icon"><i class="ph ph-paint-brush"></i></div>
+          <h3 class="service-name">Boya & Röfle</h3>
+          <p class="service-desc">Balayage, ombre, röfle ve tek renk boya uygulamalarında renk uzmanlarımızın elleriyle muhteşem tonlara kavuşun.</p>
+          <span class="service-tag"><i class="ph ph-palette"></i> Renk Uzmanlığı</span>
+        </div>
+        <!-- Keratin -->
+        <div class="service-card reveal reveal-delay-3">
+          <div class="service-icon"><i class="ph ph-waves"></i></div>
+          <h3 class="service-name">Keratin Bakımı</h3>
+          <p class="service-desc">Brezilya keratini ve saç botoksu uygulamalarıyla saçlarınızı derinlemesine besleyin, frizden kurtulun.</p>
+          <span class="service-tag"><i class="ph ph-drop"></i> Derinlemesine Bakım</span>
+        </div>
+        <!-- Manikür & Pedikür -->
+        <div class="service-card reveal reveal-delay-1">
+          <div class="service-icon"><i class="ph ph-hand-heart"></i></div>
+          <h3 class="service-name">Manikür & Pedikür</h3>
+          <p class="service-desc">Kalıcı oje, Fransız manikür, nail art ve profesyonel el-ayak bakımıyla parmaklarınızı tamamlayın.</p>
+          <span class="service-tag"><i class="ph ph-heart"></i> Özen & Bakım</span>
+        </div>
+        <!-- Kaş & Kirpik -->
+        <div class="service-card reveal reveal-delay-2">
+          <div class="service-icon"><i class="ph ph-eye"></i></div>
+          <h3 class="service-name">Kaş & Kirpik</h3>
+          <p class="service-desc">Microblading, kirpik lifting, laminasyon ve ipek kirpik uygulamalarıyla bakışlarınıza büyü katın.</p>
+          <span class="service-tag"><i class="ph ph-magic-wand"></i> Göz Büyüsü</span>
+        </div>
+        <!-- Gelin Saçı -->
+        <div class="service-card reveal reveal-delay-3">
+          <div class="service-icon"><i class="ph ph-crown"></i></div>
+          <h3 class="service-name">Gelin Saçı & Makyaj</h3>
+          <p class="service-desc">En özel günün için saç ve makyajınızı hayalinizdeki gibi tasarlıyoruz. Deneme randevusu ile sürpriz yaşamazsınız.</p>
+          <span class="service-tag"><i class="ph ph-crown-simple"></i> Premium Paket</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- 5. GALLERY                                                 -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <section id="gallery">
+    <div class="container">
+      <div class="gallery-header reveal">
+        <div class="section-tag">
+          <i class="ph ph-images"></i>
+          Çalışmalarımız
+        </div>
+        <h2 class="section-heading">Sanatımıza<br><span class="gold-text">Tanık Olun</span></h2>
+        <p class="section-sub">Her müşterimiz bir tuval, her stilistimiz bir sanatçı. İşte gurur duyduğumuz dönüşümlerden bazıları.</p>
+      </div>
+      <div class="gallery-grid">
+        <div class="gallery-card reveal reveal-delay-1">
+          <div class="gallery-inner">
+            <div class="gallery-icon-wrap"><i class="ph ph-paint-brush"></i></div>
+            <div class="gallery-label">Saç Boyama</div>
+            <div class="gallery-sublabel">Balayage & Ombre</div>
+          </div>
+        </div>
+        <div class="gallery-card reveal reveal-delay-2">
+          <div class="gallery-inner">
+            <div class="gallery-icon-wrap"><i class="ph ph-sparkle"></i></div>
+            <div class="gallery-label">Röfle & Işıltı</div>
+            <div class="gallery-sublabel">Doğal Ton Geçişleri</div>
+          </div>
+        </div>
+        <div class="gallery-card reveal reveal-delay-3">
+          <div class="gallery-inner">
+            <div class="gallery-icon-wrap"><i class="ph ph-crown"></i></div>
+            <div class="gallery-label">Gelin Saçı</div>
+            <div class="gallery-sublabel">Özel Gün Tasarımları</div>
+          </div>
+        </div>
+        <div class="gallery-card reveal reveal-delay-4">
+          <div class="gallery-inner">
+            <div class="gallery-icon-wrap"><i class="ph ph-scissors"></i></div>
+            <div class="gallery-label">Modern Kesim</div>
+            <div class="gallery-sublabel">Trend & Klasik Stiller</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- 6. WHY US                                                  -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <section id="whyus">
+    <div class="container">
+      <div class="whyus-inner">
+        <div class="whyus-left reveal">
+          <div class="section-tag">
+            <i class="ph ph-medal"></i>
+            Neden Biz?
+          </div>
+          <h2 class="section-heading">{{ city }}'nin En Tercih<br>Edilen <span class="gold-text">Kuaförü</span></h2>
+          <p class="section-sub" style="margin-bottom: 28px;">
+            {{ review_count }}+ müşteri yorumu ve {{ rating }} Google puanımızla güveni hak ettiğimizi her gün ispatlıyoruz. Bize gelen, bir daha başka yere gitmiyor.
+          </p>
+          <a href="tel:{{ phone }}" class="btn-primary" id="whyus-call-btn">
+            <i class="ph ph-phone-call"></i>
+            Hemen Arayın
+          </a>
+        </div>
+        <div class="whyus-features">
+          <div class="feature-card reveal reveal-delay-1">
+            <div class="feature-icon"><i class="ph ph-users-three"></i></div>
+            <div class="feature-name">Uzman Ekip</div>
+            <div class="feature-desc">Yıllarca eğitim almış, uluslararası sertifikalı stilistler.</div>
+          </div>
+          <div class="feature-card reveal reveal-delay-2">
+            <div class="feature-icon"><i class="ph ph-leaf"></i></div>
+            <div class="feature-name">Premium Ürünler</div>
+            <div class="feature-desc">Loreal, Wella, Kerastase gibi dünyaca ünlü markaları kullanıyoruz.</div>
+          </div>
+          <div class="feature-card reveal reveal-delay-3">
+            <div class="feature-icon"><i class="ph ph-shield-check"></i></div>
+            <div class="feature-name">Hijyen & Güvenlik</div>
+            <div class="feature-desc">Tek kullanımlık malzemeler, steril ortam, düzenli dezenfeksiyon.</div>
+          </div>
+          <div class="feature-card reveal reveal-delay-4">
+            <div class="feature-icon"><i class="ph ph-calendar-check"></i></div>
+            <div class="feature-name">Kolay Randevu</div>
+            <div class="feature-desc">Telefon veya WhatsApp ile saniyeler içinde randevu oluşturun.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- 7. GOOGLE MAPS                                             -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <section id="map">
+    <div class="container">
+      <div class="map-header reveal">
+        <div class="section-tag">
+          <i class="ph ph-map-pin"></i>
+          Konumumuz
+        </div>
+        <h2 class="section-heading">Bizi <span class="gold-text">Ziyaret Edin</span></h2>
+      </div>
+      <div class="map-wrap reveal">
+        <iframe
+          src="https://maps.google.com/maps?q={{ address | urlencode }}&output=embed&z=15"
+          allowfullscreen
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="{{ business_name }} Harita"
+        ></iframe>
+      </div>
+      <div class="map-info">
+        <div class="map-info-item">
+          <i class="ph ph-map-pin-line"></i>
+          <span>{{ address }}</span>
+        </div>
+        <div class="map-info-item">
+          <i class="ph ph-phone"></i>
+          <span>{{ phone }}</span>
+        </div>
+        <div class="map-info-item">
+          <i class="ph ph-clock"></i>
+          <span>Her gün 09:00 – 20:00</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- 8. REVIEWS                                                 -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <section id="reviews">
+    <div class="container">
+      <div class="reviews-header reveal">
+        <div class="section-tag">
+          <i class="ph ph-star"></i>
+          Müşteri Yorumları
+        </div>
+        <h2 class="section-heading">{{ review_count }}+ Mutlu Müşteri<br><span class="gold-text">Ne Diyor?</span></h2>
+      </div>
+      <!-- Rating Hero -->
+      <div class="rating-hero reveal">
+        <div>
+          <div class="rating-big">{{ rating }}</div>
+        </div>
+        <div>
+          <div class="rating-stars-big">
+            <i class="ph ph-star-fill"></i>
+            <i class="ph ph-star-fill"></i>
+            <i class="ph ph-star-fill"></i>
+            <i class="ph ph-star-fill"></i>
+            <i class="ph ph-star-fill"></i>
+          </div>
+          <div class="rating-count">{{ review_count }} Google değerlendirmesi</div>
+        </div>
+        <div class="rating-divider"></div>
+        <div class="rating-breakdown">
+          <div class="breakdown-row">
+            <span>5★</span>
+            <div class="breakdown-bar"><div class="breakdown-fill" style="width: 88%;"></div></div>
+            <span>88%</span>
+          </div>
+          <div class="breakdown-row">
+            <span>4★</span>
+            <div class="breakdown-bar"><div class="breakdown-fill" style="width: 9%;"></div></div>
+            <span>9%</span>
+          </div>
+          <div class="breakdown-row">
+            <span>3★</span>
+            <div class="breakdown-bar"><div class="breakdown-fill" style="width: 3%;"></div></div>
+            <span>3%</span>
+          </div>
+        </div>
+      </div>
+      <!-- Review Cards -->
+      <div class="reviews-grid">
+        <div class="review-card reveal reveal-delay-1">
+          <div class="review-stars">
+            <i class="ph ph-star-fill"></i><i class="ph ph-star-fill"></i>
+            <i class="ph ph-star-fill"></i><i class="ph ph-star-fill"></i>
+            <i class="ph ph-star-fill"></i>
+          </div>
+          <p class="review-text">Saçlarım hiç bu kadar güzel olmamıştı! Balayage uygulaması tam hayalimde canlandırdığım gibi çıktı. Ekip çok ilgili ve profesyonel. Kesinlikle tavsiye ediyorum.</p>
+          <div class="review-author">
+            <div class="review-avatar">A</div>
+            <div>
+              <div class="review-name">Ayşe K.</div>
+              <div class="review-date">2 hafta önce · Google</div>
+            </div>
+          </div>
+        </div>
+        <div class="review-card reveal reveal-delay-2">
+          <div class="review-stars">
+            <i class="ph ph-star-fill"></i><i class="ph ph-star-fill"></i>
+            <i class="ph ph-star-fill"></i><i class="ph ph-star-fill"></i>
+            <i class="ph ph-star-fill"></i>
+          </div>
+          <p class="review-text">Düğünüm için gelin saçı paketini aldım. Deneme randevusundan ana güne kadar her şey muhteşemdi. Fotoğrafçım saçlarımın çok iyi çıktığını söyledi. Teşekkürler!</p>
+          <div class="review-author">
+            <div class="review-avatar">S</div>
+            <div>
+              <div class="review-name">Selin M.</div>
+              <div class="review-date">1 ay önce · Google</div>
+            </div>
+          </div>
+        </div>
+        <div class="review-card reveal reveal-delay-3">
+          <div class="review-stars">
+            <i class="ph ph-star-fill"></i><i class="ph ph-star-fill"></i>
+            <i class="ph ph-star-fill"></i><i class="ph ph-star-fill"></i>
+            <i class="ph ph-star-fill"></i>
+          </div>
+          <p class="review-text">Keratin tedavisi için geldim, 3 saatte saçlarım tamamen başka bir saça dönüştü. Ortam çok temiz, ürünler kaliteli. {{ city }}'de gidebileceğiniz en iyi salon bu!</p>
+          <div class="review-author">
+            <div class="review-avatar">N</div>
+            <div>
+              <div class="review-name">Nurgül T.</div>
+              <div class="review-date">3 hafta önce · Google</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- 9. PRICING / PURCHASE CTA                                  -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <section id="cta">
+    <div class="container">
+      <div class="cta-card reveal">
+        <div class="cta-badge">
+          <i class="ph ph-crown-simple"></i>
+          Özel Fırsat
+        </div>
+        <h2 class="cta-heading">Bu Prestijli Dijital Kimliği<br><span class="gold-text">Sahiplenin</span></h2>
+        <p class="cta-sub">
+          {{ business_name }} için özel olarak hazırlanmış bu profesyonel web sitesiyle dijital dünyada da öne çıkın.
+          Daha fazla müşteri, daha fazla randevu — hemen başlayın.
+        </p>
+        <div class="cta-price">
+          <span class="cta-price-amount">₺</span>
+          <span class="cta-price-label">tek seferlik kurulum · hemen aktif</span>
+        </div>
+        <a href="{{ demo_cta_url }}" class="btn-cta-main" id="cta-main-btn">
+          <i class="ph ph-rocket-launch"></i>
+          Siteyi Sahiplen & Aktifleştir
+        </a>
+        <div class="cta-features">
+          <div class="cta-feat"><i class="ph ph-check-circle"></i>Özel Alan Adı</div>
+          <div class="cta-feat"><i class="ph ph-check-circle"></i>Google'da Görün</div>
+          <div class="cta-feat"><i class="ph ph-check-circle"></i>WhatsApp Entegrasyonu</div>
+          <div class="cta-feat"><i class="ph ph-check-circle"></i>Mobil Uyumlu</div>
+          <div class="cta-feat"><i class="ph ph-check-circle"></i>SEO Optimizasyonu</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- 10. FOOTER                                                 -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <footer id="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <!-- Brand -->
+        <div>
+          <div class="footer-brand-name">{{ business_name }}</div>
+          <p class="footer-brand-desc">
+            {{ city }}'nin köklü ve güvenilir güzellik salonu. Uzman ekibimiz, premium ürünlerimiz ve sizi her zaman öncelik olarak gören anlayışımızla hizmetinizdeyiz.
+          </p>
+          <div class="footer-socials">
+            <a href="{{ whatsapp_link }}" target="_blank" rel="noopener" class="footer-social" aria-label="WhatsApp">
+              <i class="ph ph-whatsapp-logo"></i>
+            </a>
+            <a href="#" class="footer-social" aria-label="Instagram">
+              <i class="ph ph-instagram-logo"></i>
+            </a>
+            <a href="#" class="footer-social" aria-label="Facebook">
+              <i class="ph ph-facebook-logo"></i>
+            </a>
+          </div>
+        </div>
+        <!-- Links -->
+        <div>
+          <div class="footer-col-title">Hizmetler</div>
+          <ul class="footer-links">
+            <li><a href="#services">Saç Kesim</a></li>
+            <li><a href="#services">Boya & Röfle</a></li>
+            <li><a href="#services">Keratin Bakımı</a></li>
+            <li><a href="#services">Manikür & Pedikür</a></li>
+            <li><a href="#services">Gelin Saçı</a></li>
+          </ul>
+        </div>
+        <!-- Contact -->
+        <div>
+          <div class="footer-col-title">İletişim</div>
+          <div class="footer-contact">
+            <div class="footer-contact-item">
+              <i class="ph ph-map-pin-line"></i>
+              <span>{{ address }}</span>
+            </div>
+            <div class="footer-contact-item">
+              <i class="ph ph-phone"></i>
+              <span>{{ phone }}</span>
+            </div>
+            <div class="footer-contact-item">
+              <i class="ph ph-clock"></i>
+              <span>Her gün 09:00 – 20:00</span>
+            </div>
+            <div class="footer-contact-item">
+              <i class="ph ph-star-fill" style="color: var(--gold);"></i>
+              <span>{{ rating }} Google Puanı ({{ review_count }} yorum)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-copy">
+          © 2025 <strong>{{ business_name }}</strong>. Tüm hakları saklıdır.
+        </div>
+        <div class="footer-powered">
+          Profesyonel web tasarımı ile güçlendirilmiştir.
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- 11. MOBILE STICKY BAR                                      -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div id="mobile-sticky" role="navigation" aria-label="Hızlı iletişim">
+    <div class="mobile-sticky-inner">
+      <a href="tel:{{ phone }}" class="btn-mobile-call" id="mobile-call-btn">
+        <i class="ph ph-phone-call"></i>
+        Randevu Al
+      </a>
+      <a href="{{ whatsapp_link }}" target="_blank" rel="noopener" class="btn-mobile-wa" id="mobile-wa-btn">
+        <i class="ph ph-whatsapp-logo"></i>
+        WhatsApp
+      </a>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- 12. WHATSAPP FLOAT BUTTON                                  -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <a href="{{ whatsapp_link }}" target="_blank" rel="noopener" id="whatsapp-float" aria-label="WhatsApp ile yazın">
+    <i class="ph ph-whatsapp-logo"></i>
+  </a>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- JAVASCRIPT                                                 -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <script>
+    // ── Scroll reveal observer ────────────────────────────────
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // ── Navbar scroll effect ──────────────────────────────────
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 60) {
+        navbar.style.background = 'rgba(8,8,8,0.97)';
+        navbar.style.borderBottomColor = 'rgba(201,168,76,0.25)';
+      } else {
+        navbar.style.background = 'rgba(13,13,13,0.88)';
+        navbar.style.borderBottomColor = 'rgba(201,168,76,0.18)';
+      }
+    }, { passive: true });
+
+    // ── Smooth scroll for anchor links ────────────────────────
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // ── Stagger children inside services / why us on reveal ──
+    const staggerParents = document.querySelectorAll('.services-grid, .whyus-features, .reviews-grid');
+    staggerParents.forEach(parent => {
+      const cards = parent.querySelectorAll('.service-card, .feature-card, .review-card');
+      cards.forEach((card, i) => {
+        card.style.transitionDelay = `${i * 0.08}s`;
+      });
+    });
+  </script>
+</body>
+</html>

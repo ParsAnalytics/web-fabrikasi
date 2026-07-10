@@ -1,0 +1,9 @@
+# ── Python bağımlılıkları ──────────────────
+jinja2>=3.1.0          # Şablon motoru
+twilio>=8.0.0          # WhatsApp gönderimi (isteğe bağlı)
+googlemaps>=4.10.0     # Google Places API (isteğe bağlı)
+requests>=2.31.0       # HTTP istekleri
+python-dotenv>=1.0.0   # .env dosyası okuma
+apscheduler>=3.10.0    # Yenileme hatırlatıcı zamanlayıcı
+fastapi>=0.111.0       # Webhook API (ödeme, tıklama takibi)
+uvicorn>=0.29.0        # FastAPI sunucu

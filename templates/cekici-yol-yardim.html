@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ business_name }} | 7/24 Yol Yardım & Çekici Hizmetleri</title>
+  <meta name="description" content="{{ business_name }} — {{ city }} bölgesinde 7/24 yol yardım, araç çekme ve kurtarma hizmeti. Hemen arayın, 20 dakikada yanınızdayız." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet" />
+
+  <!-- Phosphor Icons (ücretsiz CDN) -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <style>
+    /* ─── RESET & TOKEN ─────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --yellow:   #f9c600;
+      --yellow-d: #d4a800;
+      --black:    #111111;
+      --gray:     #1e1e1e;
+      --gray-2:   #2a2a2a;
+      --gray-3:   #3a3a3a;
+      --text:     #f0f0f0;
+      --muted:    #9a9a9a;
+      --white:    #ffffff;
+      --green:    #25d366;
+      --radius:   12px;
+      --shadow:   0 4px 24px rgba(0,0,0,.45);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--black);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; display: block; }
+
+    /* ─── PURCHASE BANNER ───────────────────────────── */
+    .purchase-banner {
+      background: var(--yellow);
+      color: var(--black);
+      text-align: center;
+      padding: 10px 16px;
+      font-size: .85rem;
+      font-weight: 700;
+      letter-spacing: .02em;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .purchase-banner a {
+      color: var(--black);
+      text-decoration: underline;
+      margin-left: 8px;
+    }
+
+    /* ─── NAVBAR ────────────────────────────────────── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 5%;
+      background: var(--black);
+      border-bottom: 1px solid var(--gray-3);
+      position: sticky;
+      top: 40px;
+      z-index: 999;
+    }
+    .nav-logo {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: var(--yellow);
+      letter-spacing: -.02em;
+    }
+    .nav-logo span { color: var(--white); }
+    .nav-cta {
+      background: var(--yellow);
+      color: var(--black);
+      font-weight: 700;
+      font-size: .9rem;
+      padding: 10px 20px;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform .15s, box-shadow .15s;
+    }
+    .nav-cta:hover { transform: scale(1.04); box-shadow: 0 0 0 4px rgba(249,198,0,.25); }
+
+    /* ─── HERO ──────────────────────────────────────── */
+    .hero {
+      min-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 5% 40px;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(249,198,0,.12) 0%, transparent 70%),
+        var(--black);
+    }
+
+    /* Animated warning stripes in background */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -55deg,
+        transparent,
+        transparent 60px,
+        rgba(249,198,0,.025) 60px,
+        rgba(249,198,0,.025) 120px
+      );
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(249,198,0,.12);
+      border: 1px solid rgba(249,198,0,.3);
+      color: var(--yellow);
+      font-size: .8rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 50px;
+      margin-bottom: 24px;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: .6; }
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 7vw, 4.8rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -.03em;
+      margin-bottom: 20px;
+    }
+    .hero h1 .highlight {
+      color: var(--yellow);
+      display: block;
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--muted);
+      max-width: 600px;
+      margin: 0 auto 36px;
+    }
+    .hero-sub strong { color: var(--text); }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      background: var(--yellow);
+      color: var(--black);
+      font-weight: 800;
+      font-size: 1.1rem;
+      padding: 16px 36px;
+      border-radius: 50px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 0 30px rgba(249,198,0,.4);
+      transition: transform .15s, box-shadow .15s;
+      animation: glow 2.5s ease-in-out infinite;
+    }
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(249,198,0,.3); }
+      50%       { box-shadow: 0 0 45px rgba(249,198,0,.7); }
+    }
+    .btn-primary:hover { transform: scale(1.05); }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 16px 28px;
+      border-radius: 50px;
+      border: 1px solid var(--gray-3);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: border-color .15s, background .15s;
+    }
+    .btn-secondary:hover { border-color: var(--yellow); background: rgba(249,198,0,.06); }
+
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+      margin-top: 52px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .stat-num {
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--yellow);
+      line-height: 1;
+    }
+    .stat-label { font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+
+    /* ─── SERVICES ──────────────────────────────────── */
+    .section { padding: 80px 5%; }
+    .section-title {
+      text-align: center;
+      font-size: clamp(1.6rem, 4vw, 2.6rem);
+      font-weight: 900;
+      letter-spacing: -.02em;
+      margin-bottom: 12px;
+    }
+    .section-title .accent { color: var(--yellow); }
+    .section-sub {
+      text-align: center;
+      color: var(--muted);
+      font-size: 1rem;
+      margin-bottom: 48px;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .service-card {
+      background: var(--gray);
+      border: 1px solid var(--gray-3);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      transition: border-color .2s, transform .2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: var(--yellow);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .3s;
+    }
+    .service-card:hover { border-color: var(--yellow); transform: translateY(-4px); }
+    .service-card:hover::before { transform: scaleX(1); }
+
+    .service-icon {
+      width: 52px; height: 52px;
+      background: rgba(249,198,0,.1);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      margin-bottom: 16px;
+      color: var(--yellow);
+    }
+    .service-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+    .service-card p  { font-size: .88rem; color: var(--muted); line-height: 1.55; }
+
+    /* ─── RESPONSE TIME ─────────────────────────────── */
+    .response-section {
+      background: var(--gray);
+      border-top: 1px solid var(--gray-3);
+      border-bottom: 1px solid var(--gray-3);
+    }
+    .response-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    @media(max-width:700px) { .response-inner { grid-template-columns: 1fr; gap: 32px; } }
+
+    .response-content h2 {
+      font-size: clamp(1.5rem, 4vw, 2.4rem);
+      font-weight: 900;
+      letter-spacing: -.02em;
+      margin-bottom: 16px;
+    }
+    .response-content p { color: var(--muted); margin-bottom: 28px; line-height: 1.7; }
+
+    .steps { display: flex; flex-direction: column; gap: 16px; }
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .step-num {
+      min-width: 36px; height: 36px;
+      background: var(--yellow);
+      color: var(--black);
+      font-weight: 900;
+      font-size: .9rem;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step-text h4 { font-size: .95rem; font-weight: 700; margin-bottom: 3px; }
+    .step-text p  { font-size: .83rem; color: var(--muted); }
+
+    .timer-box {
+      background: var(--black);
+      border: 2px solid var(--yellow);
+      border-radius: var(--radius);
+      padding: 40px;
+      text-align: center;
+      box-shadow: 0 0 40px rgba(249,198,0,.15);
+    }
+    .timer-num {
+      font-size: 5rem;
+      font-weight: 900;
+      color: var(--yellow);
+      line-height: 1;
+      letter-spacing: -.04em;
+    }
+    .timer-label { font-size: 1rem; color: var(--muted); margin-top: 8px; }
+    .timer-sub { font-size: .82rem; color: var(--gray-3); margin-top: 6px; }
+
+    /* ─── COVERAGE MAP ──────────────────────────────── */
+    .map-section { background: var(--black); }
+    .map-wrapper {
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--gray-3);
+      max-width: 900px;
+      margin: 0 auto;
+      height: 380px;
+    }
+    .map-wrapper iframe { width: 100%; height: 100%; border: 0; }
+
+    /* ─── REVIEWS ───────────────────────────────────── */
+    .reviews-section { background: var(--gray); border-top: 1px solid var(--gray-3); }
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .review-card {
+      background: var(--black);
+      border: 1px solid var(--gray-3);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+    .review-stars { color: var(--yellow); font-size: 1.1rem; margin-bottom: 10px; }
+    .review-text { font-size: .9rem; color: var(--muted); line-height: 1.65; margin-bottom: 16px; }
+    .review-author { font-size: .82rem; font-weight: 700; color: var(--text); }
+    .review-date   { font-size: .78rem; color: var(--gray-3); }
+
+    .rating-hero {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+    .rating-big { font-size: 4rem; font-weight: 900; color: var(--yellow); line-height: 1; }
+    .rating-info { text-align: left; }
+    .rating-stars { font-size: 1.5rem; color: var(--yellow); }
+    .rating-count { font-size: .85rem; color: var(--muted); margin-top: 4px; }
+
+    /* ─── PRICING ───────────────────────────────────── */
+    .pricing-card {
+      max-width: 480px;
+      margin: 0 auto;
+      background: var(--gray);
+      border: 2px solid var(--yellow);
+      border-radius: 16px;
+      padding: 40px;
+      text-align: center;
+      box-shadow: 0 0 50px rgba(249,198,0,.12);
+    }
+    .pricing-badge {
+      display: inline-block;
+      background: var(--yellow);
+      color: var(--black);
+      font-size: .75rem;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 50px;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .pricing-name { font-size: 1.4rem; font-weight: 700; margin-bottom: 24px; }
+    .pricing-price {
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: var(--yellow);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .pricing-period { font-size: .9rem; color: var(--muted); margin-bottom: 32px; }
+    .pricing-features {
+      list-style: none;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .pricing-features li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: .92rem;
+      color: var(--text);
+    }
+    .pricing-features li i { color: var(--yellow); font-size: 1.1rem; flex-shrink: 0; }
+
+    /* ─── STICKY CALL BAR ───────────────────────────── */
+    .sticky-call {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: var(--yellow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 20px;
+      z-index: 998;
+      box-shadow: 0 -4px 20px rgba(249,198,0,.35);
+    }
+    .sticky-call a {
+      color: var(--black);
+      font-weight: 800;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sticky-call .divider {
+      width: 1px;
+      height: 24px;
+      background: rgba(0,0,0,.2);
+    }
+    @media(min-width:768px) { .sticky-call { display: none; } }
+
+    /* ─── WHATSAPP FLOAT ────────────────────────────── */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      z-index: 997;
+    }
+    @media(min-width:768px) { .whatsapp-float { bottom: 28px; } }
+    .whatsapp-float a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 58px; height: 58px;
+      background: var(--green);
+      border-radius: 50%;
+      box-shadow: 0 4px 20px rgba(37,211,102,.5);
+      font-size: 1.8rem;
+      color: var(--white);
+      transition: transform .2s;
+    }
+    .whatsapp-float a:hover { transform: scale(1.1); }
+
+    /* ─── FOOTER ────────────────────────────────────── */
+    footer {
+      background: var(--black);
+      border-top: 1px solid var(--gray-3);
+      padding: 40px 5%;
+      text-align: center;
+    }
+    .footer-name { font-size: 1.2rem; font-weight: 900; color: var(--yellow); margin-bottom: 8px; }
+    .footer-info { font-size: .85rem; color: var(--muted); line-height: 1.8; }
+    .footer-buy {
+      margin-top: 24px;
+      padding: 14px 32px;
+      background: var(--yellow);
+      color: var(--black);
+      font-weight: 800;
+      border-radius: 50px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .95rem;
+      transition: transform .15s;
+    }
+    .footer-buy:hover { transform: scale(1.04); }
+
+    /* ─── UTILITIES ─────────────────────────────────── */
+    .container { max-width: 1100px; margin: 0 auto; }
+    .mb-spacer { padding-bottom: 80px; }
+  </style>
+</head>
+<body>
+
+  <!-- ── PURCHASE BANNER ─────────────────────────────── -->
+  <div class="purchase-banner">
+    🚧 Bu site <strong>{{ business_name }}</strong> için özel hazırlandı.
+    <a href="{{ demo_cta_url }}">Sahiplenmek için tıklayın →</a>
+  </div>
+
+  <!-- ── NAV ────────────────────────────────────────── -->
+  <nav>
+    <div class="nav-logo">{{ business_name | truncate(20) }}<span>.</span></div>
+    <a href="tel:{{ phone }}" class="nav-cta" id="nav-call-btn">
+      <i class="ph-fill ph-phone"></i>
+      Hemen Ara
+    </a>
+  </nav>
+
+  <!-- ── HERO ───────────────────────────────────────── -->
+  <section class="hero">
+    <div class="hero-badge">
+      <i class="ph-fill ph-warning-circle"></i>
+      7/24 Aktif Servis
+    </div>
+
+    <h1>
+      {{ city }}'de Anında
+      <span class="highlight">Yol Yardım & Çekici</span>
+    </h1>
+
+    <p class="hero-sub">
+      <strong>{{ business_name }}</strong> — araç arızası, kaza, lastik patlağı veya yakıt bitmesinde
+      <strong>20 dakikada</strong> yanınızdayız. Gece gündüz, her yerde.
+    </p>
+
+    <div class="hero-actions">
+      <a href="tel:{{ phone }}" class="btn-primary" id="hero-call-btn">
+        <i class="ph-fill ph-phone-call"></i>
+        {{ phone }} — Hemen Ara
+      </a>
+      <a href="{{ whatsapp_link }}" target="_blank" class="btn-secondary" id="hero-whatsapp-btn">
+        <i class="ph-fill ph-whatsapp-logo"></i>
+        WhatsApp'tan Yaz
+      </a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-num">7/24</span>
+        <span class="stat-label">Hizmet</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">20 dk</span>
+        <span class="stat-label">Ortalama Varış</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">{{ rating }}⭐</span>
+        <span class="stat-label">Google Puanı</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">{{ review_count }}+</span>
+        <span class="stat-label">Mutlu Sürücü</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SERVICES ───────────────────────────────────── -->
+  <section class="section">
+    <h2 class="section-title">Tüm <span class="accent">Yol Yardım</span> Hizmetleri</h2>
+    <p class="section-sub">{{ city }} ve çevresinde sunulan hizmetler</p>
+
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon"><i class="ph-fill ph-truck"></i></div>
+        <h3>Araç Çekme</h3>
+        <p>Kaza, arıza veya trafik yasağı durumlarında aracınızı istediğiniz noktaya çekiyoruz.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon"><i class="ph-fill ph-battery-charging"></i></div>
+        <h3>Akü Takviye & Değişim</h3>
+        <p>Boşalan akünüzü yerinde takviye ediyoruz. Gerekirse yeni akü takıyoruz.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon"><i class="ph-fill ph-tire"></i></div>
+        <h3>Lastik Değişimi</h3>
+        <p>Patlak veya inmiş lastik için yedek tekerleğinizi anında takıyoruz.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon"><i class="ph-fill ph-gas-pump"></i></div>
+        <h3>Yakıt İkmali</h3>
+        <p>Yakıtsız kaldınız mı? En yakın istasyona kadar çekiyoruz veya yakıt getiriyoruz.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon"><i class="ph-fill ph-key"></i></div>
+        <h3>Araç Açma (Kilit)</h3>
+        <p>Anahtarınızı unuttuysanız veya kilitte kırıldıysa hasarsız olarak açıyoruz.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon"><i class="ph-fill ph-wrench"></i></div>
+        <h3>Yerinde Tamir</h3>
+        <p>Küçük arızalarda aracınızı yerinde onararak yola devam etmenizi sağlıyoruz.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── RESPONSE TIME ──────────────────────────────── -->
+  <section class="section response-section">
+    <div class="response-inner container">
+      <div class="response-content">
+        <h2>Aradınız mı? <span style="color:var(--yellow)">20 Dakikada</span> Yanınızdayız.</h2>
+        <p>{{ city }} ve çevresinde geniş ekibimizle her an hazır bekliyoruz. Sabah 3'te de, tatil günleri de — fark etmez.</p>
+
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-text">
+              <h4>Bizi Arayın veya Yazın</h4>
+              <p>{{ phone }} numarasını arayın ya da WhatsApp'tan konumunuzu paylaşın.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-text">
+              <h4>En Yakın Ekip Yola Çıkar</h4>
+              <p>Konumunuza en yakın aracımız anında hareket eder.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-text">
+              <h4>Sorun Çözülür, Yola Devam</h4>
+              <p>Yerinde onarım veya güvenli çekimle sorununuzu bitiriyoruz.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timer-box">
+        <div class="timer-num">~20</div>
+        <div class="timer-label">Dakika Ortalama Varış</div>
+        <div class="timer-sub">{{ city }} merkezi için geçerlidir</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MAP ────────────────────────────────────────── -->
+  <section class="section map-section">
+    <h2 class="section-title">Hizmet <span class="accent">Bölgemiz</span></h2>
+    <p class="section-sub">{{ city }} ve çevre ilçelerde aktif hizmet</p>
+    <div class="map-wrapper">
+      <iframe
+        src="https://maps.google.com/maps?q={{ address | urlencode }}&z=14&output=embed"
+        allowfullscreen
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </section>
+
+  <!-- ── REVIEWS ────────────────────────────────────── -->
+  <section class="section reviews-section">
+    <h2 class="section-title">Müşteri <span class="accent">Yorumları</span></h2>
+    <div class="rating-hero">
+      <div class="rating-big">{{ rating }}</div>
+      <div class="rating-info">
+        <div class="rating-stars">★★★★★</div>
+        <div class="rating-count">{{ review_count }}+ Google yorumu</div>
+      </div>
+    </div>
+
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">Gece 02:00'de yolda kaldım, 18 dakikada geldiler. Çok profesyonel ekip, tavsiye ederim.</p>
+        <div class="review-author">Mehmet K.</div>
+        <div class="review-date">1 hafta önce · Google</div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">Akü takviyesi için aradım, 15 dakikada geldi. Fiyatı da çok uygundu. Teşekkürler!</p>
+        <div class="review-author">Ayşe D.</div>
+        <div class="review-date">3 hafta önce · Google</div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">Tatil dönüşü lastik patladı, anında yardım ettiler. Oto yol yardımında en iyiler.</p>
+        <div class="review-author">Ali R.</div>
+        <div class="review-date">2 ay önce · Google</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PRICING / PURCHASE CTA ─────────────────────── -->
+  <section class="section">
+    <h2 class="section-title">Bu <span class="accent">Siteyi</span> Sahiplenin</h2>
+    <p class="section-sub">{{ business_name }} için özel hazırlandı — tek tıkla size ait olsun.</p>
+
+    <div class="pricing-card">
+      <div class="pricing-badge">Özel Teklif</div>
+      <div class="pricing-name">{{ business_name }} Web Sitesi</div>
+      <div class="pricing-price">999 ₺</div>
+      <div class="pricing-period">Tek seferlik kurulum + 125 ₺/ay bakım</div>
+
+      <ul class="pricing-features">
+        <li><i class="ph-fill ph-check-circle"></i> Bu tasarım — tam olarak bu sayfa</li>
+        <li><i class="ph-fill ph-check-circle"></i> Alan adı (.com.tr) dahil</li>
+        <li><i class="ph-fill ph-check-circle"></i> SSL sertifikası (güvenli kilit)</li>
+        <li><i class="ph-fill ph-check-circle"></i> Google'da görünürlük kurulumu</li>
+        <li><i class="ph-fill ph-check-circle"></i> WhatsApp & telefon entegrasyonu</li>
+        <li><i class="ph-fill ph-check-circle"></i> 7/24 teknik destek</li>
+      </ul>
+
+      <a href="{{ demo_cta_url }}" class="btn-primary" id="pricing-cta-btn" style="width:100%;justify-content:center;font-size:1rem;">
+        <i class="ph-fill ph-shopping-cart"></i>
+        Şimdi Satın Al
+      </a>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ──────────────────────────────────────── -->
+  <footer class="mb-spacer">
+    <div class="footer-name">{{ business_name }}</div>
+    <div class="footer-info">
+      📍 {{ address }}<br />
+      📞 {{ phone }}<br />
+      🕐 7/24 Açık
+    </div>
+    <a href="{{ demo_cta_url }}" class="footer-buy" id="footer-buy-btn">
+      <i class="ph-fill ph-storefront"></i>
+      Bu Siteyi Sahiplen — 999 ₺
+    </a>
+  </footer>
+
+  <!-- ── STICKY CALL BAR (Mobile) ────────────────────── -->
+  <div class="sticky-call">
+    <a href="tel:{{ phone }}" id="sticky-call-btn">
+      <i class="ph-fill ph-phone-call"></i>
+      Hemen Ara — {{ phone }}
+    </a>
+    <div class="divider"></div>
+    <a href="{{ whatsapp_link }}" target="_blank" id="sticky-whatsapp-btn">
+      <i class="ph-fill ph-whatsapp-logo"></i>
+      WhatsApp
+    </a>
+  </div>
+
+  <!-- ── WHATSAPP FLOAT ───────────────────────────────── -->
+  <div class="whatsapp-float">
+    <a href="{{ whatsapp_link }}" target="_blank" id="float-whatsapp-btn" title="WhatsApp ile yaz">
+      <i class="ph-fill ph-whatsapp-logo"></i>
+    </a>
+  </div>
+
+</body>
+</html>

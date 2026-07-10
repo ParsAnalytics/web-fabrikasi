@@ -1,0 +1,11 @@
+.env
+__pycache__/
+*.pyc
+*.pyo
+demos/*/
+demos/generated_demos.json
+demos/send_log.json
+*.log
+.DS_Store
+Thumbs.db
+node_modules/
