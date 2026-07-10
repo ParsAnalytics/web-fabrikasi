@@ -28,7 +28,7 @@ except ImportError:
 # ── AYARLAR ────────────────────────────────────────────────
 TEMPLATE_DIR   = Path(__file__).parent / "templates"
 OUTPUT_DIR     = Path(__file__).parent / "demos"
-BASE_DEMO_URL  = "http://localhost:8000/demos"          # Canlıda: https://demo.senindomain.com
+BASE_DEMO_URL  = "https://ParsAnalytics.github.io/web-fabrikasi/demos"          # Canlıda: https://demo.senindomain.com
 PURCHASE_URL   = "https://satin-al.webfabrika.com.tr"  # Satın alma landing sayfası
 
 # Sektör → şablon dosyası eşleştirmesi
