@@ -9,7 +9,10 @@ Kullanim:
 """
 import sys, io
 # Windows terminallerde UTF-8 zorunlu
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
+try:
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
+except Exception:
+    pass
 
 import os
 import json
@@ -187,6 +190,11 @@ def generate_demo(lead: dict) -> dict:
         "whatsapp_link": phone_to_wa(lead["phone"]),
         "demo_cta_url":  f"{PURCHASE_URL}/?lead={slug}",
         "generated_at":  datetime.now().strftime("%d.%m.%Y %H:%M"),
+        # AI optimize edilmiş değişkenler
+        "hero_title":    lead.get("hero_title"),
+        "hero_sub":      lead.get("hero_sub"),
+        "about_text":    lead.get("about_text"),
+        "services":      lead.get("services"),
     }
 
     # Sektöre özel dinamik içerik
@@ -224,10 +232,22 @@ def generate_demo(lead: dict) -> dict:
 def run(leads: list = None) -> list:
     """
     Tüm leadler için demo üretir.
-    leads parametresi verilmezse SAMPLE_LEADS kullanılır.
+    leads parametresi verilmezse en son taranan leads/*.json dosyasını, o da yoksa SAMPLE_LEADS'i yükler.
     """
     if leads is None:
-        leads = SAMPLE_LEADS
+        leads_dir = Path(__file__).parent / "leads"
+        lead_files = sorted(leads_dir.glob("leads_*.json"))
+        if lead_files:
+            latest_file = lead_files[-1]
+            print(f"[Generator] En son lead dosyası yükleniyor: {latest_file.name}")
+            try:
+                with open(latest_file, encoding="utf-8") as f:
+                    leads = json.load(f)
+            except Exception as e:
+                print(f"[Generator] Lead dosyası okunurken hata: {e}")
+                leads = SAMPLE_LEADS
+        else:
+            leads = SAMPLE_LEADS
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
