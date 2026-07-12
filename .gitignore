@@ -9,3 +9,5 @@ demos/send_log.json
 .DS_Store
 Thumbs.db
 node_modules/
+
+.vercel
