@@ -56,10 +56,8 @@ REACT_DIR = BASE_DIR / "react_app"
 if (REACT_DIR / "assets").exists():
     app.mount("/assets", StaticFiles(directory=str(REACT_DIR / "assets")), name="react_assets")
 
-# Güvenlik Kontrolü
+# Güvenlik Kontrolü (Devre Dışı Bırakıldı - Açık Erişim)
 async def verify_auth(x_admin_password: str = Header(None)):
-    if not x_admin_password or x_admin_password != ADMIN_PASSWORD:
-        raise HTTPException(status_code=401, detail="Yetkisiz erişim. Şifre hatalı.")
     return True
 
 # Yardımcı veri okuma/yazma fonksiyonları
@@ -88,14 +86,7 @@ def log_event(event_type: str, data: dict):
 
 # ── API ENDPOINTS ─────────────────────────────────────────────
 
-@app.post("/api/auth/verify")
-async def verify_password(payload: dict):
-    password = payload.get("password")
-    if password == ADMIN_PASSWORD:
-        return {"status": "ok", "message": "Giriş başarılı"}
-    raise HTTPException(status_code=401, detail="Şifre hatalı")
-
-@app.post("/api/run/scraper", dependencies=[Depends(verify_auth)])
+@app.post("/api/run/scraper")
 async def run_scraper(query: str = "çekici", city: str = "Kadıköy"):
     """Maps kazıyıcıyı senkron çalıştırıp sonuçları döner."""
     try:
@@ -115,7 +106,7 @@ async def run_scraper(query: str = "çekici", city: str = "Kadıköy"):
         log_event("scraper_failed", {"error": str(e)})
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/api/run/generator", dependencies=[Depends(verify_auth)])
+@app.post("/api/run/generator")
 async def run_generator(background_tasks: BackgroundTasks):
     def worker():
         try:
@@ -132,7 +123,7 @@ async def run_generator(background_tasks: BackgroundTasks):
     background_tasks.add_task(worker)
     return {"status": "started", "message": "Demo üretimi ve GitHub yayını başlatıldı."}
 
-@app.post("/api/run/optimizer", dependencies=[Depends(verify_auth)])
+@app.post("/api/run/optimizer")
 async def run_optimizer(background_tasks: BackgroundTasks):
     """Lead'leri Claude/AI ile optimize eder."""
     def worker():
@@ -148,75 +139,68 @@ async def run_optimizer(background_tasks: BackgroundTasks):
                 leads = json.load(f)
                 
             from ai_optimizer import AIOptimizer
-            from demo_generator import slugify
-            optimizer = AIOptimizer()
+            import asyncio
             
-            optimized_leads = []
-            for lead in leads:
-                if not lead.get("slug"):
-                    lead["slug"] = slugify(f"{lead['name']}-{lead['city']}")
-                opt_lead = optimizer.optimize_lead(lead)
-                optimized_leads.append(opt_lead)
-                
-            with open(latest_file, "w", encoding="utf-8") as f:
-                json.dump(optimized_leads, f, ensure_ascii=False, indent=2)
-                
-            log_event("optimizer_completed", {"file": latest_file.name, "count": len(optimized_leads)})
+            async def run_ai():
+                opt = AIOptimizer()
+                optimized = await opt.optimize_leads_batch(leads)
+                with open(latest_file, "w", encoding="utf-8") as fw:
+                    json.dump(optimized, fw, ensure_ascii=False, indent=2)
+                    
+            asyncio.run(run_ai())
+            log_event("optimizer_completed", {"count": len(leads)})
+            
         except Exception as e:
             log_event("optimizer_failed", {"error": str(e)})
 
     background_tasks.add_task(worker)
-    return {"status": "started", "message": "Lead optimizasyonu arka planda başlatıldı."}
+    return {"status": "started", "message": "AI Optimizasyon arkaplanda başlatıldı."}
 
-@app.post("/api/run/video", dependencies=[Depends(verify_auth)])
-async def run_video(slug: str):
-    """Playwright ile demo videosu oluşturur."""
-    try:
-        log_event("video_generation_started", {"slug": slug})
-        from video_generator import generate_demo_video
-        video_url = generate_demo_video(slug)
-        if video_url:
-            log_event("video_generation_completed", {"slug": slug, "url": video_url})
-            return {"status": "success", "video_url": video_url}
-        else:
-            log_event("video_generation_failed", {"slug": slug, "error": "Video üretilemedi"})
-            raise HTTPException(status_code=500, detail="Video üretilemedi.")
-    except Exception as e:
-        log_event("video_generation_failed", {"slug": slug, "error": str(e)})
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.post("/api/run/sender", dependencies=[Depends(verify_auth)])
-async def run_sender(background_tasks: BackgroundTasks, send_real: bool = False):
-    mode_flag = "--send" if send_real else ""
+@app.post("/api/run/video")
+async def run_video(background_tasks: BackgroundTasks):
+    """Tanıtım videoları üretir."""
     def worker():
         try:
-            log_event("sender_started", {"mode": "real" if send_real else "simulation"})
-            subprocess.run(f"python whatsapp_sender.py {mode_flag}", shell=True, check=True)
+            log_event("video_started", {})
+            subprocess.run("python video_generator.py", shell=True, check=True)
+            log_event("video_completed", {})
+        except Exception as e:
+            log_event("video_failed", {"error": str(e)})
+            
+    background_tasks.add_task(worker)
+    return {"status": "started", "message": "Video üretim süreci arkaplanda başlatıldı."}
+
+@app.post("/api/run/sender")
+async def run_sender(background_tasks: BackgroundTasks):
+    def worker():
+        try:
+            log_event("sender_started", {})
+            subprocess.run("python whatsapp_sender.py", shell=True, check=True)
             log_event("sender_completed", {})
         except Exception as e:
             log_event("sender_failed", {"error": str(e)})
 
     background_tasks.add_task(worker)
-    return {"status": "started", "message": "WhatsApp gönderimi başlatıldı."}
+    return {"status": "started", "message": "WhatsApp/Email otomatik gönderimi başlatıldı."}
 
-@app.post("/api/create-payment", dependencies=[Depends(verify_auth)])
-async def create_payment_link(slug: str, name: str, phone: str, amount: float = 999.0):
+@app.post("/api/create-payment")
+async def create_payment_route(payload: dict):
+    company = payload.get("companyName")
+    price = payload.get("price", 999.00)
+    if not company:
+        raise HTTPException(status_code=400, detail="Firma adı zorunlu")
+    
+    from payment_link import generate_payment_link
     try:
-        cmd = f'python payment_link.py --slug "{slug}" --name "{name}" --phone "{phone}" --amount {amount}'
-        subprocess.run(cmd, shell=True, check=True)
-        log_event("payment_link_created", {"slug": slug, "amount": amount})
-        return {"status": "success", "message": f"{name} için ödeme talebi oluşturuldu."}
+        link_data = generate_payment_link(company, price)
+        log_event("payment_link_created", link_data)
+        return {"status": "success", "link": link_data["payment_url"]}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/api/leads/import-raw", dependencies=[Depends(verify_auth)])
+@app.post("/api/leads/import-raw")
 async def import_raw_leads(payload: dict):
     raw_text = payload.get("text", "")
-    if not raw_text:
-        raise HTTPException(status_code=400, detail="Metin boş olamaz.")
-        
-    import re
-    from lead_scraper import score_lead
     from demo_generator import slugify
     
     def map_category_text(text: str) -> str:
@@ -390,7 +374,7 @@ async def import_raw_leads(payload: dict):
         "count": len(unique_new_leads)
     }
 
-@app.post("/api/run/terminal", dependencies=[Depends(verify_auth)])
+@app.post("/api/run/terminal")
 async def run_terminal_command(payload: dict):
     command = payload.get("command")
     if not command:
@@ -409,7 +393,7 @@ async def run_terminal_command(payload: dict):
     except Exception as e:
         return {"output": f"Sistem Hatası: {str(e)}"}
 
-@app.get("/api/dashboard-data", dependencies=[Depends(verify_auth)])
+@app.get("/api/dashboard-data")
 async def get_dashboard_data():
     demos = load_json(DEMOS_DIR / "generated_demos.json")
     send_log = load_json(DEMOS_DIR / "send_log.json", dict)
@@ -429,7 +413,7 @@ async def get_dashboard_data():
         "send_log": send_log
     }
 
-@app.get("/api/scraped-leads", dependencies=[Depends(verify_auth)])
+@app.get("/api/scraped-leads")
 async def get_scraped_leads():
     """Son taranan lead dosyalarını arayüze döner."""
     lead_files = sorted(LEADS_DIR.glob("leads_*.json"))
