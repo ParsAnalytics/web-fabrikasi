@@ -7,3 +7,8 @@ python-dotenv>=1.0.0   # .env dosyası okuma
 apscheduler>=3.10.0    # Yenileme hatırlatıcı zamanlayıcı
 fastapi>=0.111.0       # Webhook API (ödeme, tıklama takibi)
 uvicorn>=0.29.0        # FastAPI sunucu
+anthropic>=0.18.0       # Claude API istemcisi
+playwright>=1.40.0      # Mobil video kaydı için web otomasyonu
+google-generativeai>=0.3.0 # Ücretsiz Gemini API istemcisi
+
+

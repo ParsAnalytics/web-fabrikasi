@@ -117,10 +117,20 @@ async def serve_demo(slug: str, request: Request):
 @app.post("/payment/success")
 async def payment_success(request: Request):
     """iyzico ödeme başarılı callback'i."""
+    body = {}
     try:
         body = await request.json()
     except Exception:
-        body = dict(await request.form())
+        try:
+            body = dict(await request.form())
+        except Exception:
+            body = {}
+
+    # Query parametrelerini de ekle (GET istekleri veya url-encoded fallback'ler için)
+    params = dict(request.query_params)
+    for k, v in params.items():
+        if k not in body or not body[k]:
+            body[k] = v
 
     slug        = body.get("conversationId", body.get("slug", ""))
     amount      = body.get("price", 0)

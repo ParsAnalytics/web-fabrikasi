@@ -6,7 +6,10 @@ Leads klasöründeki ham taranmış verileri arayüze servis eder.
 """
 
 import sys, io
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
+try:
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
+except Exception:
+    pass
 
 import os
 import json
@@ -16,6 +19,7 @@ from datetime import datetime, timedelta
 
 from fastapi import FastAPI, Request, HTTPException, BackgroundTasks, Depends, Header
 from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
 import uvicorn
 
 try:
@@ -46,6 +50,11 @@ EVENTS_LOG = DATA_DIR / "events.json"
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin123")
 
 app = FastAPI(title="Web Fabrikası Güvenli Kontrol Paneli")
+app.mount("/demos", StaticFiles(directory=str(DEMOS_DIR)), name="demos")
+
+REACT_DIR = BASE_DIR / "react_app"
+if (REACT_DIR / "assets").exists():
+    app.mount("/assets", StaticFiles(directory=str(REACT_DIR / "assets")), name="react_assets")
 
 # Güvenlik Kontrolü
 async def verify_auth(x_admin_password: str = Header(None)):
@@ -123,6 +132,59 @@ async def run_generator(background_tasks: BackgroundTasks):
     background_tasks.add_task(worker)
     return {"status": "started", "message": "Demo üretimi ve GitHub yayını başlatıldı."}
 
+@app.post("/api/run/optimizer", dependencies=[Depends(verify_auth)])
+async def run_optimizer(background_tasks: BackgroundTasks):
+    """Lead'leri Claude/AI ile optimize eder."""
+    def worker():
+        try:
+            log_event("optimizer_started", {})
+            lead_files = sorted(LEADS_DIR.glob("leads_*.json"))
+            if not lead_files:
+                log_event("optimizer_failed", {"error": "Lead dosyası bulunamadı"})
+                return
+            
+            latest_file = lead_files[-1]
+            with open(latest_file, encoding="utf-8") as f:
+                leads = json.load(f)
+                
+            from ai_optimizer import AIOptimizer
+            from demo_generator import slugify
+            optimizer = AIOptimizer()
+            
+            optimized_leads = []
+            for lead in leads:
+                if not lead.get("slug"):
+                    lead["slug"] = slugify(f"{lead['name']}-{lead['city']}")
+                opt_lead = optimizer.optimize_lead(lead)
+                optimized_leads.append(opt_lead)
+                
+            with open(latest_file, "w", encoding="utf-8") as f:
+                json.dump(optimized_leads, f, ensure_ascii=False, indent=2)
+                
+            log_event("optimizer_completed", {"file": latest_file.name, "count": len(optimized_leads)})
+        except Exception as e:
+            log_event("optimizer_failed", {"error": str(e)})
+
+    background_tasks.add_task(worker)
+    return {"status": "started", "message": "Lead optimizasyonu arka planda başlatıldı."}
+
+@app.post("/api/run/video", dependencies=[Depends(verify_auth)])
+async def run_video(slug: str):
+    """Playwright ile demo videosu oluşturur."""
+    try:
+        log_event("video_generation_started", {"slug": slug})
+        from video_generator import generate_demo_video
+        video_url = generate_demo_video(slug)
+        if video_url:
+            log_event("video_generation_completed", {"slug": slug, "url": video_url})
+            return {"status": "success", "video_url": video_url}
+        else:
+            log_event("video_generation_failed", {"slug": slug, "error": "Video üretilemedi"})
+            raise HTTPException(status_code=500, detail="Video üretilemedi.")
+    except Exception as e:
+        log_event("video_generation_failed", {"slug": slug, "error": str(e)})
+        raise HTTPException(status_code=500, detail=str(e))
+
 @app.post("/api/run/sender", dependencies=[Depends(verify_auth)])
 async def run_sender(background_tasks: BackgroundTasks, send_real: bool = False):
     mode_flag = "--send" if send_real else ""
@@ -146,6 +208,187 @@ async def create_payment_link(slug: str, name: str, phone: str, amount: float = 
         return {"status": "success", "message": f"{name} için ödeme talebi oluşturuldu."}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/leads/import-raw", dependencies=[Depends(verify_auth)])
+async def import_raw_leads(payload: dict):
+    raw_text = payload.get("text", "")
+    if not raw_text:
+        raise HTTPException(status_code=400, detail="Metin boş olamaz.")
+        
+    import re
+    from lead_scraper import score_lead
+    from demo_generator import slugify
+    
+    def map_category_text(text: str) -> str:
+        text_lower = text.lower()
+        if any(k in text_lower for k in ["çekici", "yol yardım", "kurtarma", "kurtarıcı", "kurtari"]):
+            return "cekici"
+        elif any(k in text_lower for k in ["anaokulu", "kreş", "okul"]):
+            return "anaokulu"
+        elif any(k in text_lower for k in ["kuaför", "güzellik", "berber", "saç"]):
+            return "kuafor"
+        elif any(k in text_lower for k in ["restoran", "lokanta", "kafe", "yemek"]):
+            return "restoran"
+        elif any(k in text_lower for k in ["motosiklet", "tamir", "oto servis", "lastik", "araba"]):
+            return "cekici"
+        return "genel"
+        
+    lines = [line.strip() for line in raw_text.split('\n') if line.strip()]
+    parsed_leads = []
+    
+    rating_pattern = re.compile(r'^(\d[,\.]\d)\((\d+)\)$')
+    
+    for idx, line in enumerate(lines):
+        match = rating_pattern.match(line)
+        if match:
+            rating = float(match.group(1).replace(',', '.'))
+            review_count = int(match.group(2))
+            
+            name = ""
+            name_idx = idx - 1
+            while name_idx >= 0:
+                candidate = lines[name_idx]
+                if candidate in ["Sponsorlu", "Paylaş", "Yeni", "Site", "Web sitesi", "Yol tarifi"]:
+                    name_idx -= 1
+                    continue
+                name = candidate
+                break
+                
+            if not name:
+                continue
+                
+            category = "genel"
+            address = ""
+            cat_addr_line = ""
+            if idx + 1 < len(lines):
+                cat_addr_line = lines[idx + 1]
+                
+            parts = re.split(r'[·⋅•]', cat_addr_line)
+            if len(parts) >= 2:
+                category_text = parts[0].strip()
+                address = parts[1].strip()
+                category = map_category_text(category_text)
+            elif cat_addr_line:
+                address = cat_addr_line
+                
+            phone = ""
+            for offset in [2, 3]:
+                if idx + offset < len(lines):
+                    candidate_line = lines[idx + offset]
+                    phone_match = re.search(r'(?:\+90|0)?\s*5\d{2}\s*\d{3}\s*\d{2}\s*\d{2}', candidate_line)
+                    if phone_match:
+                        phone = phone_match.group(0).strip()
+                        break
+            
+            has_website = False
+            for j in range(idx + 1, min(idx + 6, len(lines))):
+                if lines[j].strip().lower() in ["web sitesi", "website", "site"]:
+                    has_website = True
+                    break
+                    
+            parsed_leads.append({
+                "name": name,
+                "phone": phone,
+                "address": address,
+                "city": "İstanbul",
+                "rating": rating,
+                "review_count": review_count,
+                "category": category,
+                "has_website": has_website,
+                "types": category,
+                "scraped_at": datetime.now().isoformat()
+            })
+            
+    send_log = load_json(DEMOS_DIR / "send_log.json", dict)
+    customers = load_json(CUSTOMERS_DB, dict)
+    
+    from whatsapp_sender import normalize_phone
+    
+    existing_phones = set()
+    
+    for e in send_log.get("sent", []):
+        p = e.get("phone")
+        if p:
+            try: existing_phones.add(normalize_phone(p))
+            except Exception: pass
+            
+    for e in send_log.get("failed", []):
+        p = e.get("phone")
+        if p:
+            try: existing_phones.add(normalize_phone(p))
+            except Exception: pass
+
+    for c in customers.values():
+        p = c.get("phone")
+        if p:
+            try: existing_phones.add(normalize_phone(p))
+            except Exception: pass
+            
+    lead_files = sorted(LEADS_DIR.glob("leads_*.json"))
+    for lf in lead_files:
+        try:
+            leads_in_file = load_json(lf)
+            for l in leads_in_file:
+                p = l.get("phone")
+                if p:
+                    try: existing_phones.add(normalize_phone(p))
+                    except Exception: pass
+        except Exception:
+            pass
+
+    unique_new_leads = []
+    skipped_duplicates = 0
+    skipped_has_website = 0
+    skipped_no_phone = 0
+    
+    for lead in parsed_leads:
+        if not lead["phone"]:
+            skipped_no_phone += 1
+            continue
+            
+        try:
+            norm_phone = normalize_phone(lead["phone"])
+        except Exception:
+            skipped_no_phone += 1
+            continue
+            
+        if norm_phone in existing_phones:
+            skipped_duplicates += 1
+            continue
+            
+        if lead["has_website"]:
+            skipped_has_website += 1
+            continue
+            
+        lead["score"] = score_lead(lead)
+        lead["slug"] = slugify(f"{lead['name']}-istanbul")
+        lead.pop("has_website", None)
+        
+        unique_new_leads.append(lead)
+        existing_phones.add(norm_phone)
+        
+    if not unique_new_leads:
+        return {
+            "status": "success",
+            "message": f"Yeni aday bulunamadı. (Ayrıştırılan: {len(parsed_leads)}, Mükerrer: {skipped_duplicates}, Web sitesi olan: {skipped_has_website}, Telefonu eksik: {skipped_no_phone})",
+            "count": 0
+        }
+        
+    filename = f"leads_manual_{datetime.now().strftime('%Y%m%d_%H%M')}.json"
+    out_path = LEADS_DIR / filename
+    save_json(out_path, unique_new_leads)
+    
+    csv_filename = filename.replace(".json", ".csv")
+    from lead_scraper import save_to_csv
+    save_to_csv(unique_new_leads, csv_filename)
+    
+    log_event("manual_leads_imported", {"count": len(unique_new_leads), "file": filename})
+    
+    return {
+        "status": "success",
+        "message": f"{len(unique_new_leads)} yeni aday başarıyla içe aktarıldı! (Toplam ayrıştırılan: {len(parsed_leads)}, Mükerrer: {skipped_duplicates}, Web sitesi olan: {skipped_has_website})",
+        "count": len(unique_new_leads)
+    }
 
 @app.post("/api/run/terminal", dependencies=[Depends(verify_auth)])
 async def run_terminal_command(payload: dict):
@@ -194,11 +437,19 @@ async def get_scraped_leads():
         return load_json(lead_files[-1])
     return []
 
-@app.get("/", response_class=HTMLResponse)
-async def serve_gui():
+@app.get("/bot", response_class=HTMLResponse)
+async def serve_bot_gui():
     html_file = BASE_DIR / "dashboard.html"
     if not html_file.exists():
         raise HTTPException(status_code=404, detail="Görsel arayüz dosyası bulunamadı.")
+    with open(html_file, encoding="utf-8") as f:
+        return HTMLResponse(content=f.read())
+
+@app.get("/", response_class=HTMLResponse)
+async def serve_react_gui():
+    html_file = BASE_DIR / "react_app" / "index.html"
+    if not html_file.exists():
+        raise HTTPException(status_code=404, detail="React arayüz dosyası bulunamadı. Lütfen npm run build ile React projesini derleyip react_app klasörüne kopyalayın.")
     with open(html_file, encoding="utf-8") as f:
         return HTMLResponse(content=f.read())
 

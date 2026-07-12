@@ -1,42 +1,50 @@
-# 🏭 Web Fabrikası — Yapılan Geliştirmeler & Canlıya Geçiş Özeti
+# 🏭 Web Fabrikası — AI & Playwright Entegrasyon walkthrough
 
-Bu belgede, Google Maps üzerinde web sitesi olmayan küçük işletmeleri tespit edip otomatik demo üreten ve WhatsApp ile satan otomasyon sistemimizin geliştirme aşamaları ve doğrulama sonuçları yer almaktadır.
+Bu belgede, Google Haritalar üzerinde web sitesi olmayan küçük işletmeler için tamamen kişiselleştirilmiş web siteleri ve demo videoları üreten otomasyon sistemimizin en son sürüm geliştirmeleri ve doğrulama sonuçları yer almaktadır.
 
 ---
 
 ## 🛠️ Neler Geliştirildi?
 
-1. **Çoklu Sektör Şablonları (`templates/`)**:
-   - 🚨 **Yol Yardım / Çekici** (`cekici-yol-yardim.html`): Sarı/Siyah acil durum konseptli, anında arama odaklı.
-   - 🎒 **Anaokulu / Kreş** (`anaokulu.html`): Sarı/Mor, neşeli, ön kayıt odaklı.
-   - ✂️ **Kuaför / Güzellik Salonu** (`kuafor.html`): Koyu lüks gold detaylı, randevu odaklı.
-   - 🍽️ **Restoran / Kafe** (`restoran.html`): Koyu/Sıcak tonlar, menü ve rezervasyon odaklı.
+1. **Claude (Anthropic) AI Entegrasyonu (`ai_optimizer.py`)**:
+   - Google Maps'ten kazınan lead'ler için Claude API yardımıyla otomatik **Teşhis (Diagnostics)**, **Site Brifi** ve **Kişiselleştirilmiş Soğuk Satış Mesajı** üretir.
+   - API anahtarı girilmediğinde sistemin çökmesini engellemek için **Simülasyon/Fallback** modu barındırır.
 
-2. **Otomasyon Motorları (`.py`)**:
-   - `lead_scraper.py`: Google Places API ile web sitesi olmayan işletmeleri filtreleyerek toplar ve yorum sayıları/puanlarına göre lead skorlaması yapar.
-   - `demo_generator.py`: Jinja2 kullanarak lead verilerini sektörel şablonlara yerleştirir ve 30 saniyede hazır statik web sayfaları üretir.
-   - `whatsapp_sender.py`: A/B test mesajları hazırlar, spam engeli için rastgele bekleme süreleri (35-90 sn) uygular ve Twilio API entegrasyonu sunar.
-   - `payment_link.py`: iyzico entegrasyonu ile müşteriye özel ödeme linki ve WhatsApp sipariş mesajı oluşturur.
-   - `webhook_server.py`: FastAPI ile ödeme bildirimlerini alır, ödeme yapan işletmenin demosundaki "Satın Al" banner'ını kaldırıp siteyi anında aktifleştirir.
+2. **Dinamik HTML Şablonları & Demo Motoru (`demo_generator.py`)**:
+   - Jinja2 şablonları (`cekici-yol-yardim.html`, `anaokulu.html` vb.) AI tarafından üretilen özel H1 başlığı, alt başlığı, 3 ana hizmet başlık/açıklamaları ve hakkımızda metinlerini dinamik olarak derler.
+   - En son taranan `leads_*.json` dosyasını otomatik olarak bularak o listedeki lead'lere özel demo üretir.
 
-3. **Yönetim Paneli (`dashboard.html`)**:
-   - HTML/JS ile yerel veritabanı (JSON) dosyalarını okuyan, toplam ciroyu, aktif müşterileri ve son olayları (tıklama, ödeme) canlı gösteren dashboard paneli.
+3. **Playwright Mobil Demo Videosu Motoru (`video_generator.py`)**:
+   - Playwright'ın Chromium altyapısını kullanarak üretilen demoyu mobil cihaz dikey (9:16) formatında açar.
+   - Sayfada yavaşça aşağı kaydırma (cinematic scroll) yaparak 10 saniyelik demo videosunu (`demo.webm`) tamamen yerel ve otomatik olarak kaydeder.
 
-4. **Yayın ve Bulut Kurulumu (`github_setup.py`)**:
-   - Projenin tek tuşla **[ParsAnalytics/web-fabrikasi](https://github.com/ParsAnalytics/web-fabrikasi)** GitHub reposuna pushlanması ve **GitHub Pages** (Actions workflow) ile canlı demo linklerinin yayınlanması sağlandı.
+4. **Premium Koyu Arayüz (`dashboard.html` & `server.py`)**:
+   - Plus Jakarta Sans fontları ve Indigo/Gold odaklı cam efektli (glassmorphism) modern bir koyu tema tasarlandı.
+   - Arayüze "AI ile Optimize Et", "Video Üret" ve modal içinde "Videoyu Oynat" özellikleri eklendi.
+   - Sunucunun tek başına demoları ve videoları servis etmesi için FastAPI `StaticFiles` yönlendirmesi eklendi.
 
 ---
 
 ## 🧪 Doğrulama ve Test Sonuçları
 
-- **Demo Üretim Testi**: 7 örnek lead için şablonlar başarıyla derlendi ve `demos/` klasörüne aktarıldı.
-- **WhatsApp Gönderim Testi**: Simülasyon modunda 35-90 saniye aralıklarla bekleme süreleri ve kişiselleştirilmiş A/B test mesajlarının başarıyla üretildiği doğrulandı.
-- **FastAPI & Ödeme Webhook Testi**: Simüle edilmiş iyzico ödeme linki oluşturulup tıklandığında webhook sunucusunun bunu başarıyla yakaladığı, veritabanına kaydettiği ve demoyu canlı sürüme (banner olmadan) dönüştürdüğü doğrulandı.
-- **Yönetim Paneli Testi**: Dashboard'un 5 saniyede bir verileri güncellediği ve aktif müşterileri anlık yansıttığı test edildi.
+- **AI Optimizer Fallback Testi**: API key yokluğunda Türkçe ve emojili teşhis ve tekliflerin başarıyla üretildiği doğrulandı.
+- **Dinamik Demo Üretimi**: Taranan 8 lead için özelleştirilmiş HTML sayfaları 1 saniyede başarıyla derlendi.
+- **Playwright Video Kaydı**: 9:16 dikey mobil video üretimi test edildi ve `demos/yildiz-yol-yardim-kadikoy/demo.webm` olarak başarıyla kaydedildi.
+- **FastAPI backend**: `/api/run/optimizer` ve `/api/run/video` endpoint'leri başarıyla test edildi.
 
 ---
 
-## 📈 Canlıya Geçiş İçin Son Yapılması Gerekenler
-1. `github_setup.py` başarıyla çalıştı ve GitHub Pages canlıda. İlerleyen dönemlerde yeni lead eklediğinizde sadece `python demo_generator.py` çalıştırıp kodları git'e pushlamanız yeterli olacaktır (GitHub Pages otomatik güncellenir).
-2. Gerçek WhatsApp gönderimleri için `.env` dosyasındaki Twilio bilgilerini güncelleyin.
-3. Gerçek lead kazıma için `.env` dosyasındaki `GOOGLE_PLACES_API_KEY` alanını doldurun.
+## 🚀 Sistemi Başlatma ve Çalıştırma
+
+1. **API Ayarları**:
+   - Claude'un en iyi performansla çalışması için `.env` dosyanıza `ANTHROPIC_API_KEY=your_key` ekleyin.
+   
+2. **Sunucuyu Çalıştırın**:
+   ```bash
+   python server.py
+   ```
+   
+3. **Kontrol Paneline Giriş Yapın**:
+   - Tarayıcınızda `http://localhost:8000` adresini açın.
+   - Varsayılan şifre olan `admin123` ile giriş yapın.
+   - Artık lead'lerinizi görebilir, AI optimizasyonlarını tetikleyebilir ve Playwright ile dikey mobil videolarını üreterek satış havuzunuzu yönetebilirsiniz!

@@ -43,8 +43,6 @@ def generate_mock_link(slug: str) -> str:
     return f"http://localhost:{port}/payment/success?conversationId={slug}&price=999"
 
 def create_payment(slug: str, name: str, phone: str, amount: float) -> str:
-    # iyzico API yerine doğrudan sürtünmesiz simülasyon linki üretiyoruz
-    # Bu link FastAPI webhook_server'ımızdaki ödeme callback'ini taklit eder
     pay_url = generate_mock_link(slug)
     
     payments = load_payments()
@@ -60,8 +58,30 @@ def create_payment(slug: str, name: str, phone: str, amount: float) -> str:
     })
     save_payments(payments)
     
-    # WhatsApp Mesajı oluştur
-    msg = f"""Merhaba {name} yetkilisi,
+    iban_number = os.getenv("IBAN_NUMBER", "").strip()
+    iban_bank = os.getenv("IBAN_BANK", "Ziraat Bankası").strip()
+    iban_owner = os.getenv("IBAN_OWNER", "Ad Soyad").strip()
+    
+    # Eğer IBAN ayarlanmışsa IBAN mesajı, yoksa online ödeme linki mesajı üret
+    if iban_number and not iban_number.startswith("TR00"):
+        msg = f"""Merhaba {name} yetkilisi,
+
+Sitenizi beğendiğiniz için teşekkürler! 🎉
+
+Ödemenizi aşağıdaki IBAN adresine havale/EFT olarak gönderebilirsiniz:
+
+🏦 Banka: {iban_bank}
+👤 Alıcı: {iban_owner}
+💳 IBAN: {iban_number}
+💵 Tutar: {amount} ₺
+📝 Açıklama: {slug} (Onay için lütfen açıklamaya bunu yazın)
+
+Ödemeniz ulaştıktan sonra siteniz 24 saat içinde yayına alınacaktır.
+{amount} ₺ kurulum + 125 ₺/ay bakım.
+
+Sorularınız için buradan yazabilirsiniz."""
+    else:
+        msg = f"""Merhaba {name} yetkilisi,
 
 Sitenizi beğendiğiniz için teşekkürler! 🎉
 
@@ -71,8 +91,7 @@ Güvenli ödeme linkiniz:
 Ödeme tamamlandıktan sonra siteniz 24 saat içinde yayına alınır.
 {amount} ₺ kurulum + 125 ₺/ay bakım.
 
-Sorularınız için buradan yazabilirsiniz.
-"""
+Sorularınız için buradan yazabilirsiniz."""
     
     print("\n" + "="*50)
     print(f"💰 Ödeme Talebi Oluşturuldu ({name})")

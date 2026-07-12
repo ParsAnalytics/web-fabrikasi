@@ -1518,14 +1518,11 @@
         </div>
 
         <h1 class="hero-h1">
-          <span class="yellow-underline">Çocuğunuzun</span> En<br/>
-          Mutlu Yılları<br/>
-          <span class="name-highlight">{{ business_name }}</span>'nda
+          {{ hero_title | default('<span class="yellow-underline">Çocuğunuzun</span> En Mutlu Yılları <span class="name-highlight">' + business_name + "</span>'nda") | safe }}
         </h1>
 
         <p class="hero-sub">
-          <strong>2–6 yaş</strong> arası çocuklar için MEB onaylı, güvenli, sevgi dolu eğitim ortamı.
-          Uzman eğitmenler, zengin etkinlikler ve bahçeli kampüsümüzle çocuğunuzu geleceğe hazırlıyoruz.
+          {{ hero_sub | default("<strong>2–6 yaş</strong> arası çocuklar için MEB onaylı, güvenli, sevgi dolu eğitim ortamı. Uzman eğitmenler, zengin etkinlikler ve bahçeli kampüsümüzle çocuğunuzu geleceğe hazırlıyoruz.") | safe }}
         </p>
 
         <div class="hero-pills">

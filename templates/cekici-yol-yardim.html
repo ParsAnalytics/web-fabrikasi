@@ -549,13 +549,11 @@
     </div>
 
     <h1>
-      {{ city }}'de Anında
-      <span class="highlight">Yol Yardım & Çekici</span>
+      {{ hero_title | default(city + "'de Anında <span class=\"highlight\">Yol Yardım & Çekici</span>") | safe }}
     </h1>
 
     <p class="hero-sub">
-      <strong>{{ business_name }}</strong> — araç arızası, kaza, lastik patlağı veya yakıt bitmesinde
-      <strong>20 dakikada</strong> yanınızdayız. Gece gündüz, her yerde.
+      {{ hero_sub | default("<strong>" + business_name + "</strong> — araç arızası, kaza, lastik patlağı veya yakıt bitmesinde <strong>20 dakikada</strong> yanınızdayız. Gece gündüz, her yerde.") | safe }}
     </p>
 
     <div class="hero-actions">
@@ -595,21 +593,35 @@
     <p class="section-sub">{{ city }} ve çevresinde sunulan hizmetler</p>
 
     <div class="services-grid">
-      <div class="service-card">
-        <div class="service-icon"><i class="ph-fill ph-truck"></i></div>
-        <h3>Araç Çekme</h3>
-        <p>Kaza, arıza veya trafik yasağı durumlarında aracınızı istediğiniz noktaya çekiyoruz.</p>
-      </div>
-      <div class="service-card">
-        <div class="service-icon"><i class="ph-fill ph-battery-charging"></i></div>
-        <h3>Akü Takviye & Değişim</h3>
-        <p>Boşalan akünüzü yerinde takviye ediyoruz. Gerekirse yeni akü takıyoruz.</p>
-      </div>
-      <div class="service-card">
-        <div class="service-icon"><i class="ph-fill ph-tire"></i></div>
-        <h3>Lastik Değişimi</h3>
-        <p>Patlak veya inmiş lastik için yedek tekerleğinizi anında takıyoruz.</p>
-      </div>
+      {% if services %}
+        {% for s in services %}
+        <div class="service-card">
+          <div class="service-icon">
+            {% if loop.index == 1 %}<i class="ph-fill ph-truck"></i>
+            {% elif loop.index == 2 %}<i class="ph-fill ph-battery-charging"></i>
+            {% else %}<i class="ph-fill ph-tire"></i>{% endif %}
+          </div>
+          <h3>{{ s.title }}</h3>
+          <p>{{ s.desc }}</p>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="service-card">
+          <div class="service-icon"><i class="ph-fill ph-truck"></i></div>
+          <h3>Araç Çekme</h3>
+          <p>Kaza, arıza veya trafik yasağı durumlarında aracınızı istediğiniz noktaya çekiyoruz.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon"><i class="ph-fill ph-battery-charging"></i></div>
+          <h3>Akü Takviye & Değişim</h3>
+          <p>Boşalan akünüzü yerinde takviye ediyoruz. Gerekirse yeni akü takıyoruz.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon"><i class="ph-fill ph-tire"></i></div>
+          <h3>Lastik Değişimi</h3>
+          <p>Patlak veya inmiş lastik için yedek tekerleğinizi anında takıyoruz.</p>
+        </div>
+      {% endif %}
       <div class="service-card">
         <div class="service-icon"><i class="ph-fill ph-gas-pump"></i></div>
         <h3>Yakıt İkmali</h3>

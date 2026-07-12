@@ -1,0 +1,76 @@
+[
+  {
+    "type": "video_generation_started",
+    "data": {
+      "slug": "yildiz-yol-yardim-kadikoy"
+    },
+    "timestamp": "2026-07-12T00:48:59.113517"
+  },
+  {
+    "type": "video_generation_failed",
+    "data": {
+      "slug": "yildiz-yol-yardim-kadikoy",
+      "error": "I/O operation on closed file."
+    },
+    "timestamp": "2026-07-12T00:48:59.466638"
+  },
+  {
+    "type": "optimizer_started",
+    "data": {},
+    "timestamp": "2026-07-12T00:49:05.082942"
+  },
+  {
+    "type": "optimizer_failed",
+    "data": {
+      "error": "I/O operation on closed file."
+    },
+    "timestamp": "2026-07-12T00:49:05.150987"
+  },
+  {
+    "type": "generator_started",
+    "data": {},
+    "timestamp": "2026-07-12T00:51:41.913344"
+  },
+  {
+    "type": "generator_completed",
+    "data": {},
+    "timestamp": "2026-07-12T00:51:42.868138"
+  },
+  {
+    "type": "github_push_completed",
+    "data": {},
+    "timestamp": "2026-07-12T00:51:47.304829"
+  },
+  {
+    "type": "scraper_started",
+    "data": {
+      "query": "çekici",
+      "city": "Kadıköy"
+    },
+    "timestamp": "2026-07-12T00:52:33.206772"
+  },
+  {
+    "type": "scraper_completed",
+    "data": {
+      "query": "çekici",
+      "city": "Kadıköy"
+    },
+    "timestamp": "2026-07-12T00:52:33.787553"
+  },
+  {
+    "type": "scraper_started",
+    "data": {
+      "query": "kafe",
+      "city": "Kadıköy"
+    },
+    "timestamp": "2026-07-12T00:52:40.242542"
+  },
+  {
+    "type": "scraper_completed",
+    "data": {
+      "query": "kafe",
+      "city": "Kadıköy"
+    },
+    "timestamp": "2026-07-12T00:52:40.640476"
+  }
+]

@@ -14,7 +14,10 @@ Mod 3 — Belirli bir leade test mesajı:
 """
 
 import sys, io
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
+try:
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
+except Exception:
+    pass
 
 import os
 import json
@@ -124,8 +127,23 @@ def save_log(log: dict):
         json.dump(log, f, ensure_ascii=False, indent=2)
 
 
-def already_sent(log: dict, slug: str) -> bool:
-    return any(e["slug"] == slug for e in log["sent"])
+def already_sent(log: dict, slug: str, phone: str = None) -> bool:
+    if any(e.get("slug") == slug for e in log["sent"]):
+        return True
+    if phone:
+        try:
+            norm_phone = normalize_phone(phone)
+            for e in log["sent"]:
+                log_phone = e.get("phone")
+                if log_phone:
+                    try:
+                        if normalize_phone(log_phone) == norm_phone:
+                            return True
+                    except Exception:
+                        pass
+        except Exception:
+            pass
+    return False
 
 
 def count_today(log: dict) -> int:
@@ -208,7 +226,7 @@ def run(send_real: bool = False, test_phone: str = None):
         slug = lead.get("slug", lead["name"])
 
         # Daha önce gönderildi mi?
-        if already_sent(log, slug):
+        if already_sent(log, slug, lead.get("phone")):
             print(f"  [{i:02d}] ATLA  | {lead['name']} (zaten gönderildi)")
             log["skipped"].append({"slug": slug, "reason": "already_sent"})
             continue

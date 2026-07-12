@@ -1,0 +1,9 @@
+﻿score,name,phone,city,address,rating,review_count,category,types,slug,scraped_at
+95,Yıldız Yol Yardım,0532 100 10 10,Kadıköy,"Kadıköy, İstanbul",4.9,156,cekici,cekici,,2026-07-10T11:02:46.829575
+75,Ege Çekici,0541 200 20 20,Beşiktaş,"Beşiktaş, İstanbul",4.6,44,cekici,cekici,,2026-07-10T11:02:46.829655
+60,Lüks Saç Tasarım,0505 600 60 60,Şişli,"Şişli, İstanbul",4.8,112,kuafor,kuafor,,2026-07-10T11:02:46.829680
+60,Altın Lokanta,0212 800 80 80,Beşiktaş,"Beşiktaş, İstanbul",4.6,205,restoran,restoran,,2026-07-10T11:02:46.829694
+50,Küçük Adımlar Anaokulu,0212 300 30 30,Şişli,"Şişli, İstanbul",4.8,71,anaokulu,anaokulu,,2026-07-10T11:02:46.829664
+50,Stil Kuaför,0532 500 50 50,Beyoğlu,"Beyoğlu, İstanbul",4.5,88,kuafor,kuafor,,2026-07-10T11:02:46.829676
+45,İpek Tesisatçı,0532 700 70 70,Kadıköy,"Kadıköy, İstanbul",4.4,33,tesisat,tesisat,,2026-07-10T11:02:46.829690
+40,Rüya Bebek Yuvası,0216 400 40 40,Üsküdar,"Üsküdar, İstanbul",4.7,29,anaokulu,anaokulu,,2026-07-10T11:02:46.829671

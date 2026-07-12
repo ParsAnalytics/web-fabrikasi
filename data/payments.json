@@ -1,0 +1,12 @@
+[
+  {
+    "slug": "gokkusagi-anaokulu-uskudar",
+    "name": "Gökkuşağı Anaokulu",
+    "phone": "02123334455",
+    "amount": 999.0,
+    "payment_url": "http://localhost:8080/payment/success?conversationId=gokkusagi-anaokulu-uskudar&price=999",
+    "status": "pending",
+    "created_at": "2026-07-10T11:25:29.883999",
+    "paid_at": null
+  }
+]
